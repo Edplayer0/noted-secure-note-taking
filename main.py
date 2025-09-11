@@ -97,7 +97,7 @@ def guardar(opciones):
 
     match opciones:
         case 1:
-            notasjson[titulo_original] = base64.urlsafe_b64encode(
+            notasjson[cipher.encrypt(titulo_original).decode('utf-8')] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
@@ -118,7 +118,7 @@ def guardar(opciones):
                 if titulo != titulo_original:
                     notasjson2[titulo] = notasjson[titulo]
                 else:
-                    notasjson2[editor_entry.get().strip()] = base64.urlsafe_b64encode(
+                    notasjson2[cipher.encrypt(editor_entry.get().strip()).decode('utf-8')] = base64.urlsafe_b64encode(
                         cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
@@ -372,7 +372,10 @@ def on_entry_focus_in(event):
 
 def show_editor(event, label_titulo):
     global titulo_original
-    titulo_original = label_titulo
+    if label_titulo != "":
+        titulo_original = cipher.decrypt(label_titulo).decode('utf-8')
+    else:
+        titulo_original = label_titulo
 
     # ESTO ES POR SI NO HAY NOTAS
     try:
