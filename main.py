@@ -22,7 +22,7 @@ notas_frames = {}
 
 def verificar_contrasena(password):
     global datosp
-    with open("password.json", "r") as passw:
+    with open("E:/Programación/Proyectos/NotEd/password.json", "r") as passw:
         datosp = json.load(passw)
 
     truepass = base64.urlsafe_b64decode(datosp[0])
@@ -100,7 +100,7 @@ def guardar(opciones):
             notasjson[titulo_original] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("notas.json", "w") as notas:
+            with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
                 json.dump(notasjson, notas, indent=4)
 
         case 2:
@@ -108,7 +108,7 @@ def guardar(opciones):
             notasjson[editor_entry.get().strip()] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("notas.json", "w") as notas:
+            with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
                 json.dump(notasjson, notas, indent=4)
 
         case 3:
@@ -121,7 +121,7 @@ def guardar(opciones):
                     notasjson2[editor_entry.get().strip()] = base64.urlsafe_b64encode(
                         cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("notas.json", "w") as notas:
+            with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
                 json.dump(notasjson2, notas, indent=4)
 
 # ATRAS
@@ -175,7 +175,7 @@ def borrar_nota():
         if confirmacion:
             global notasjson
             del notasjson[titulo_original]
-            with open("notas.json", "w") as notas:
+            with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
                 json.dump(notasjson, notas, indent=4)
         else:
             return
@@ -228,7 +228,8 @@ def menu_show():
 
 def backup():
     global datosp
-    backup_file = open("backup/backup.json", "w")
+    backup_file = open(
+        "E:/Programación/Proyectos/NotEd/backup/backup.json", "w")
     json.dump([notasjson, datosp], backup_file, indent=4)
     backup_file.close()
 
@@ -398,8 +399,6 @@ def show_editor(event, label_titulo):
         editor_text.insert(
             "1.0", cipher.decrypt(base64.urlsafe_b64decode(
                 notasjson[label_titulo])).decode('utf-8'))
-        editor_text.configure(yscrollcommand=scroll.set)
-        scroll.configure(command=editor_text.yview)
 
     ventana.update_idletasks()
 
@@ -426,7 +425,7 @@ def inicio():
 
 # NOTAS
 
-    with open("notas.json", "r") as notas:
+    with open("E:/Programación/Proyectos/NotEd/notas.json", "r") as notas:
         notasjson = json.load(notas)
 
     t = 0
