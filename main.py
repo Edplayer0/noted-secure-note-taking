@@ -97,7 +97,7 @@ def guardar(opciones):
 
     match opciones:
         case 1:
-            notasjson[cipher.encrypt(titulo_original).decode('utf-8')] = base64.urlsafe_b64encode(
+            notasjson[base64.urlsafe_b64encode(cipher.encrypt(titulo_original.encode())).decode('utf-8')] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
@@ -105,7 +105,7 @@ def guardar(opciones):
 
         case 2:
 
-            notasjson[editor_entry.get().strip()] = base64.urlsafe_b64encode(
+            notasjson[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode('utf-8')] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
@@ -118,7 +118,7 @@ def guardar(opciones):
                 if titulo != titulo_original:
                     notasjson2[titulo] = notasjson[titulo]
                 else:
-                    notasjson2[cipher.encrypt(editor_entry.get().strip()).decode('utf-8')] = base64.urlsafe_b64encode(
+                    notasjson2[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode('utf-8')] = base64.urlsafe_b64encode(
                         cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
@@ -373,7 +373,8 @@ def on_entry_focus_in(event):
 def show_editor(event, label_titulo):
     global titulo_original
     if label_titulo != "":
-        titulo_original = cipher.decrypt(label_titulo).decode('utf-8')
+        titulo_original = cipher.decrypt(
+            base64.urlsafe_b64decode(label_titulo)).decode('utf-8')
     else:
         titulo_original = label_titulo
 
@@ -398,7 +399,7 @@ def show_editor(event, label_titulo):
     else:
         editor_entry.delete(0, tkinter.END)
         editor_entry.config(fg='black')
-        editor_entry.insert(0, label_titulo)
+        editor_entry.insert(0, titulo_original)
         editor_text.insert(
             "1.0", cipher.decrypt(base64.urlsafe_b64decode(
                 notasjson[label_titulo])).decode('utf-8'))
@@ -437,7 +438,7 @@ def inicio():
 
     # CARGAR NOTAS
 
-    for tituloj in notasjson.keys():
+    for titulo_dict in notasjson.keys():
         try:
             print(type(notas_frames[f_i]))
         except KeyError:
@@ -449,10 +450,10 @@ def inicio():
             c = 0
             r = 0
 
-        notas_labels = tkinter.Label(notas_frames[f_i], text=tituloj, font=(
+        notas_labels = tkinter.Label(notas_frames[f_i], text=cipher.decrypt(base64.urlsafe_b64decode(titulo_dict)).decode('utf-8'), font=(
             "Segoe Script", "15"), relief="solid", borderwidth=1, bg="white")
         notas_labels.bind(
-            "<Button-1>", lambda event, x=tituloj: show_editor(event, x))
+            "<Button-1>", lambda event, x=titulo_dict: show_editor(event, x))
         notas_labels.grid(column=c, row=r, sticky="nsew", padx=1, pady=1)
         if c == 0:
             c += 1
