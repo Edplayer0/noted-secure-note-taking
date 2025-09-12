@@ -118,7 +118,7 @@ def guardar(opciones):
                 if cipher.decrypt(base64.urlsafe_b64decode(titulo)).decode('utf-8') != titulo_original:
                     notasjson2[titulo] = notasjson[titulo]
                 else:
-                    notasjson2[titulo_safe] = base64.urlsafe_b64encode(
+                    notasjson2[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode('utf-8')] = base64.urlsafe_b64encode(
                         cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
