@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives import constant_time
 
 
 af = 0
-
+titulo_safe = 0
 notas_frames = {}
 
 
@@ -115,10 +115,10 @@ def guardar(opciones):
             notasjson2 = {}
 
             for titulo in notasjson.keys():
-                if titulo != titulo_original:
+                if cipher.decrypt(base64.urlsafe_b64decode(titulo)).decode('utf-8') != titulo_original:
                     notasjson2[titulo] = notasjson[titulo]
                 else:
-                    notasjson2[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode('utf-8')] = base64.urlsafe_b64encode(
+                    notasjson2[titulo_safe] = base64.urlsafe_b64encode(
                         cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
@@ -144,6 +144,7 @@ def atras():
     else:
         # CAMBIO DE TITULO
         opciones = 3
+    print(opciones)
     guardar(opciones)
     editor_entry.delete(0, tkinter.END)
     editor_text.delete("1.0", "end")
@@ -371,10 +372,11 @@ def on_entry_focus_in(event):
 
 
 def show_editor(event, label_titulo):
-    global titulo_original
+    global titulo_original, titulo_safe
     if label_titulo != "":
         titulo_original = cipher.decrypt(
             base64.urlsafe_b64decode(label_titulo)).decode('utf-8')
+        titulo_safe = label_titulo
     else:
         titulo_original = label_titulo
 
