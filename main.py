@@ -97,7 +97,7 @@ def guardar(opciones):
 
     match opciones:
         case 1:
-            notasjson[base64.urlsafe_b64encode(cipher.encrypt(titulo_original.encode())).decode('utf-8')] = base64.urlsafe_b64encode(
+            notasjson[titulo_safe] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
