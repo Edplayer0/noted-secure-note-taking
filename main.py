@@ -13,7 +13,8 @@ from cryptography.hazmat.primitives import constant_time
 
 
 af = 0
-titulo_safe = 0
+titulo_safe = None
+cipher = None
 notas_frames = {}
 
 
@@ -21,7 +22,7 @@ notas_frames = {}
 
 
 def verificar_contrasena(password):
-    global datosp
+    global datosp, cipher
     with open("E:/Programación/Proyectos/NotEd/password.json", "r") as passw:
         datosp = json.load(passw)
 
@@ -413,7 +414,7 @@ def show_editor(event, label_titulo):
 
 def inicio():
 
-    global header, titulo, boton_menu, notas_frames, editor, notasjson
+    global header, titulo, boton_menu, notas_frames, editor, notasjson, cipher
 
     if login:
         Noted.destroy()
