@@ -145,7 +145,6 @@ def atras():
     else:
         # CAMBIO DE TITULO
         opciones = 3
-    print(opciones)
     guardar(opciones)
     editor_entry.delete(0, tkinter.END)
     editor_text.delete("1.0", "end")
