@@ -175,7 +175,7 @@ def borrar_nota():
         )
         if confirmacion:
             global notasjson
-            del notasjson[titulo_original]
+            del notasjson[titulo_safe]
             with open("E:/Programación/Proyectos/NotEd/notas.json", "w") as notas:
                 json.dump(notasjson, notas, indent=4)
         else:
