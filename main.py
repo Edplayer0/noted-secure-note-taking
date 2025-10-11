@@ -12,10 +12,10 @@ from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import constant_time
 
 
-af = 0
+af: int = 0
 titulo_safe = None
 cipher = None
-notas_frames = {}
+notas_frames: dict = {}
 
 
 # VERIFICACION DE CONTRASENA
@@ -23,7 +23,7 @@ notas_frames = {}
 
 def verificar_contrasena(password):
     global datosp, cipher
-    with open("E:/Proyectos/NotEd/password.json", "r") as passw:
+    with open("E:/Proyectos/NotEd/password.json", "r", encoding="UTF-8") as passw:
         datosp = json.load(passw)
 
     truepass = base64.urlsafe_b64decode(datosp[0])
@@ -102,7 +102,7 @@ def guardar(opciones):
             notasjson[titulo_safe] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("E:/Proyectos/NotEd/notas.json", "w") as notas:
+            with open("E:/Proyectos/NotEd/notas.json", "w", encoding="UTF-8") as notas:
                 json.dump(notasjson, notas, indent=4)
 
         case 2:
@@ -110,7 +110,7 @@ def guardar(opciones):
             notasjson[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode('utf-8')] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("E:/Proyectos/NotEd/notas.json", "w") as notas:
+            with open("E:/Proyectos/NotEd/notas.json", "w", encoding="UTF-8") as notas:
                 json.dump(notasjson, notas, indent=4)
 
         case 3:
@@ -123,7 +123,7 @@ def guardar(opciones):
                     notasjson2[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode('utf-8')] = base64.urlsafe_b64encode(
                         cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("E:/Proyectos/NotEd/notas.json", "w") as notas:
+            with open("E:/Proyectos/NotEd/notas.json", "w", encoding="UTF-8") as notas:
                 json.dump(notasjson2, notas, indent=4)
 
 # ATRAS
@@ -157,8 +157,8 @@ def atras():
     titulo.pack(side="left")
     boton_menu.pack(side="right")
 
-    for frame in notas_frames.keys():
-        notas_frames[frame].destroy()
+    for item in notas_frames.items():
+        notas_frames[item[0]].destroy()
 
     del notas_frames
     notas_frames = {}
@@ -177,7 +177,7 @@ def borrar_nota():
         if confirmacion:
             global notasjson
             del notasjson[titulo_safe]
-            with open("E:/Proyectos/NotEd/notas.json", "w") as notas:
+            with open("E:/Proyectos/NotEd/notas.json", "w", encoding="UTF-8") as notas:
                 json.dump(notasjson, notas, indent=4)
         else:
             return
@@ -231,23 +231,9 @@ def menu_show():
 def backup():
     global datosp
     backup_file = open(
-        "E:/Proyectos/NotEd/backup/backup.json", "w")
+        "E:/Proyectos/NotEd/backup/backup.json", "w", encoding="UTF-8")
     json.dump([notasjson, datosp], backup_file, indent=4)
     backup_file.close()
-
-
-# def ram_salts():
-#    salt3 = os.urandom(16)
-#    derivacion3 = PBKDF2HMAC(
-#        algorithm=hashes.SHA256(),
-#        length=32,
-#        salt=salt3,
-#        iterations=200000
-#    )
-#    cipher2 =
-#    for titulo in notasjson.keys():
-#        notasjson[titulo] = cipher.decrypt(
-#            base64.urlsafe_b64decode(notasjson[titulo])).decode()
 
 
 # VENTANA
@@ -295,6 +281,7 @@ Noted = tkinter.Label(header, fg="white", bg="#FFEE8C",
                       font=("Segoe Script", "35"), text="NotEd")
 Noted.pack()
 login.pack(fill="both", expand=True, pady=30, padx=35)
+entrada_contrasena.focus_set()
 
 # FOOTER
 
@@ -354,14 +341,11 @@ menu_copia = tkinter.Label(
     menu, text="Realizar copia de seguridad", border=1, bg="white", relief="solid", font=("Arial", "15"), cursor="hand2")
 menu_cambio = tkinter.Label(
     menu, text="Cambiar contraseña", border=1, bg="white", relief="solid", font=("Arial", "15"), cursor="hand2")
-menu_salt = tkinter.Label(
-    menu, text="Randomizar salts", border=1, bg="white", relief="solid", font=("Arial", "15"), cursor="hand2")
 
 menu_copia.bind("<Button-1>", lambda event: backup())
 
 menu_copia.grid(column=0, row=0, sticky="nsew", padx=1, pady=1)
 menu_cambio.grid(column=0, row=1, sticky="nsew", padx=1, pady=1)
-menu_salt.grid(column=0, row=2, sticky="nsew", padx=1, pady=1)
 
 # MOSTRAR EDITOR
 
@@ -432,7 +416,7 @@ def inicio():
 
 # NOTAS
 
-    with open("E:/Proyectos/NotEd/notas.json", "r") as notas:
+    with open("E:/Proyectos/NotEd/notas.json", "r", encoding="UTF-8") as notas:
         notasjson = json.load(notas)
 
     t = 0
