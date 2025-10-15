@@ -78,7 +78,7 @@ def next_frame():
     global af
 
     try:
-        print(type(notas_frames[af+1]))
+        type(notas_frames[af+1])
         notas_frames[af].pack_forget()
         af += 1
         notas_frames[af].pack(fill="both", expand=True)
@@ -90,7 +90,7 @@ def prev_frame():
     global af
 
     try:
-        print(type(notas_frames[af-1]))
+        type(notas_frames[af-1])
         notas_frames[af].pack_forget()
         af -= 1
         notas_frames[af].pack(fill="both", expand=True)
@@ -200,8 +200,8 @@ def borrar_nota():
     editor_text.delete("1.0", "end")
     global notas_frames
 
-    for frame in notas_frames.keys():
-        notas_frames[frame].destroy()
+    for frame in notas_frames.items():
+        frame[1].destroy()
 
     del notas_frames
     notas_frames = {}
@@ -434,7 +434,7 @@ def inicio():
 
     for titulo_dict in notasjson.keys():
         try:
-            print(type(notas_frames[f_i]))
+            type(notas_frames[f_i])
         except KeyError:
             notas_frames[f_i] = tkinter.Frame(ventana, bg="white")
             notas_frames[f_i].columnconfigure(0, weight=1, uniform="group1")
@@ -455,7 +455,7 @@ def inicio():
             c = 0
             r += 1
         f += 0.25
-        f_i = int(str(f)[0])
+        f_i = int(f)
         t += 1
 
     # MOSTRAR NOTAS
@@ -476,5 +476,5 @@ def inicio():
     footer.pack(fill="x", side="bottom")
 
 
-# FINAL
+# MAINLOOP
 ventana.mainloop()
