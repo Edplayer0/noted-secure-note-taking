@@ -1,3 +1,4 @@
 #Excluir archivo de notas
 src/notas.json
+src/Backup/backup.json
 .venv

@@ -1,20 +1,27 @@
 # NotEd: El mejor programa de notas :)
 
 import gc
-import base64
+import sys
 import json
+import base64
 import tkinter
 from tkinter import ttk
 from tkinter import messagebox
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import constant_time
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
+# Archivos de la aplicacion
+
+PASSWORD_FILE = f"{sys.prefix}\\..\\src\\password.json"
+NOTES_FILE = f"{sys.prefix}\\..\\src\\notas.json"
+BACKUP_FILE = f"{sys.prefix}\\..\\src\\Backup\\backup.json"
+
+# Variables globales
 
 af: int = 0
 titulo_safe = None
-cipher = None
 notas_frames: dict = {}
 
 
@@ -22,8 +29,9 @@ notas_frames: dict = {}
 
 
 def verificar_contrasena(password):
-    global datosp, cipher
-    with open("E:/Proyectos/NotEd/password.json", "r", encoding="UTF-8") as passw:
+    global datosp
+
+    with open(PASSWORD_FILE, "r", encoding="UTF-8") as passw:
         datosp = json.load(passw)
 
     truepass = base64.urlsafe_b64decode(datosp[0])
@@ -102,7 +110,7 @@ def guardar(opciones):
             notasjson[titulo_safe] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("E:/Proyectos/NotEd/notas.json", "w", encoding="UTF-8") as notas:
+            with open(NOTES_FILE, "w", encoding="UTF-8") as notas:
                 json.dump(notasjson, notas, indent=4)
 
         case 2:
@@ -110,7 +118,7 @@ def guardar(opciones):
             notasjson[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode('utf-8')] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("E:/Proyectos/NotEd/notas.json", "w", encoding="UTF-8") as notas:
+            with open(NOTES_FILE, "w", encoding="UTF-8") as notas:
                 json.dump(notasjson, notas, indent=4)
 
         case 3:
@@ -120,10 +128,10 @@ def guardar(opciones):
                 if cipher.decrypt(base64.urlsafe_b64decode(titulo)).decode('utf-8') != titulo_original:
                     notasjson2[titulo] = notasjson[titulo]
                 else:
-                    notasjson2[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode('utf-8')] = base64.urlsafe_b64encode(
-                        cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
+                    notasjson2[base64.urlsafe_b64encode(cipher.encrypt(editor_entry.get().strip().encode())).decode(
+                        'utf-8')] = base64.urlsafe_b64encode(cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
-            with open("E:/Proyectos/NotEd/notas.json", "w", encoding="UTF-8") as notas:
+            with open(NOTES_FILE, "w", encoding="UTF-8") as notas:
                 json.dump(notasjson2, notas, indent=4)
 
 # ATRAS
@@ -154,7 +162,7 @@ def atras():
     borrar_boton.pack_forget()
     editor.pack_forget()
     footer.pack(fill="x", side="bottom")
-    titulo.pack(side="left")
+    titulo_header.pack(side="left")
     boton_menu.pack(side="right")
 
     for item in notas_frames.items():
@@ -177,7 +185,7 @@ def borrar_nota():
         if confirmacion:
             global notasjson
             del notasjson[titulo_safe]
-            with open("E:/Proyectos/NotEd/notas.json", "w", encoding="UTF-8") as notas:
+            with open(NOTES_FILE, "w", encoding="UTF-8") as notas:
                 json.dump(notasjson, notas, indent=4)
         else:
             return
@@ -185,7 +193,7 @@ def borrar_nota():
     regresar.pack_forget()
     borrar_boton.pack_forget()
     editor.pack_forget()
-    titulo.pack(side="left")
+    titulo_header.pack(side="left")
     boton_menu.pack(side="right")
     footer.pack(fill="x", side="bottom")
     editor_entry.delete(0, tkinter.END)
@@ -230,8 +238,7 @@ def menu_show():
 
 def backup():
     global datosp
-    backup_file = open(
-        "E:/Proyectos/NotEd/backup/backup.json", "w", encoding="UTF-8")
+    backup_file = open(BACKUP_FILE, "w", encoding="UTF-8")
     json.dump([notasjson, datosp], backup_file, indent=4)
     backup_file.close()
 
@@ -268,8 +275,8 @@ copylabel.pack(side="bottom")
 # HEADER
 
 header = tkinter.Frame(ventana, bg="#FFEE8C")
-titulo = tkinter.Label(header, text="NotEd", bg="#FFEE8C",
-                       font="Arial 23", pady=5, padx=10, fg="white")
+titulo_header = tkinter.Label(header, text="NotEd", bg="#FFEE8C",
+                              font="Arial 23", pady=5, padx=10, fg="white")
 boton_menu = tkinter.Button(header, text="☰", bd=0, relief="flat",
                             bg="#FFEE8C", fg="white", pady=5, padx=10, font="Arial 23", cursor="hand2", command=menu_show)
 regresar = tkinter.Button(header, text="<", bd=0, relief="flat", bg="#FFEE8C",
@@ -372,7 +379,7 @@ def show_editor(event, label_titulo):
         pass
 
     footer.pack_forget()
-    titulo.pack_forget()
+    titulo_header.pack_forget()
     boton_menu.pack_forget()
     regresar.pack(side="left")
     borrar_boton.pack(side="right")
@@ -398,7 +405,7 @@ def show_editor(event, label_titulo):
 
 def inicio():
 
-    global header, titulo, boton_menu, notas_frames, editor, notasjson, cipher
+    global header, titulo, boton_menu, notas_frames, editor, notasjson
 
     if login:
         Noted.destroy()
@@ -410,13 +417,13 @@ def inicio():
 # HEADER
 
     header.pack(fill="x")
-    titulo.pack(side="left")
+    titulo_header.pack(side="left")
     boton_menu.pack(side="right")
 
 
 # NOTAS
 
-    with open("E:/Proyectos/NotEd/notas.json", "r", encoding="UTF-8") as notas:
+    with open(NOTES_FILE, "r", encoding="UTF-8") as notas:
         notasjson = json.load(notas)
 
     t = 0
