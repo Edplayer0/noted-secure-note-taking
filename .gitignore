@@ -1,2 +1,3 @@
 #Excluir archivo de notas
-notas.json
+src/notas.json
+.venv
