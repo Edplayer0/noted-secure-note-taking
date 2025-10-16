@@ -12,11 +12,26 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import constant_time
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
+from log_function import log
+
 # Archivos de la aplicacion
 
-PASSWORD_FILE = f"{sys.prefix}\\..\\src\\password.json"
-NOTES_FILE = f"{sys.prefix}\\..\\src\\notas.json"
-BACKUP_FILE = f"{sys.prefix}\\..\\src\\Backup\\backup.json"
+if getattr(sys, "frozen", False):
+    # Identifica si esta en uso
+    PASSWORD_FILE = "E:\\Programas\\NotEd\\password.json"
+    NOTES_FILE = "E:\\Programas\\NotEd\\notas.json"
+    BACKUP_FILE = "E:\\Programas\\NotEd\\Backup\\backup.json"
+    LOG_FILE = "E:\\Programas\\NotEd\\log.txt"
+    ICON = f"{sys._MEIPASS}\\icon.ico"
+    log(LOG_FILE, "APLICACION EN ESTADO DE USO")
+else:
+    # Identifica si esta en desarrollo
+    PASSWORD_FILE = f"{sys.prefix}\\..\\src\\password.json"
+    NOTES_FILE = f"{sys.prefix}\\..\\src\\notas.json"
+    BACKUP_FILE = f"{sys.prefix}\\..\\src\\Backup\\backup.json"
+    LOG_FILE = f"{sys.prefix}\\..\\src\\log.txt"
+    ICON = f"{sys.prefix}\\..\\src\\icon.ico"
+    log(LOG_FILE, "APLICACION EN ESTADO DE DESARROLLO")
 
 # Variables globales
 
@@ -31,8 +46,12 @@ notas_frames: dict = {}
 def verificar_contrasena(password):
     global datosp
 
-    with open(PASSWORD_FILE, "r", encoding="UTF-8") as passw:
-        datosp = json.load(passw)
+    try:
+        with open(PASSWORD_FILE, "r", encoding="UTF-8") as passw:
+            datosp = json.load(passw)
+    except Exception as e:
+        log(LOG_FILE, f"ERROR AL ABRIR EL ARCHIVO: {e}")
+        exit()
 
     truepass = base64.urlsafe_b64decode(datosp[0])
     salt1 = base64.urlsafe_b64decode(datosp[1])
@@ -67,6 +86,7 @@ def verificar_contrasena(password):
         cipher = Fernet(base64.urlsafe_b64encode(notas_pass))
         del notas_pass
         gc.collect()
+        log(LOG_FILE, "SESSION INICIADA CORRECTAMENTE")
         inicio()
     else:
         messagebox.showerror("Error", "Contraseña incorrecta")
@@ -238,9 +258,13 @@ def menu_show():
 
 def backup():
     global datosp
-    backup_file = open(BACKUP_FILE, "w", encoding="UTF-8")
-    json.dump([notasjson, datosp], backup_file, indent=4)
-    backup_file.close()
+    try:
+        backup_file = open(BACKUP_FILE, "w", encoding="UTF-8")
+        json.dump([notasjson, datosp], backup_file, indent=4)
+        backup_file.close()
+        log(LOG_FILE, "RESPALDO CREADO CORRECTAMENTE")
+    except Exception as e:
+        log(LOG_FILE, f"ERROR AL RESPALDAR: {e}")
 
 
 # VENTANA
