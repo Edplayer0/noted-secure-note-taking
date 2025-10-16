@@ -386,6 +386,7 @@
   ('json.scanner',
    'C:\\Users\\Edgar\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\json\\scanner.py',
    'PYMODULE'),
+  ('log_function', 'e:\\Proyectos\\NotEd\\src\\log_function.py', 'PYMODULE'),
   ('logging',
    'C:\\Users\\Edgar\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\logging\\__init__.py',
    'PYMODULE'),

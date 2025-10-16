@@ -5,7 +5,7 @@ a = Analysis(
     ['e:\\Proyectos\\NotEd\\src\\main.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('e:\\Proyectos\\NotEd\\src\\icon.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['c:\\Users\\Edgar\\Contacts\\Downloads\\generated-f03a12b6574853c2f9a7f415da7d731ea2357aafb5984cc2eff416951e436b81.ico'],
+    icon=['c:\\Users\\Edgar\\Contacts\\Downloads\\Telegram Desktop\\IMG_20251015_132119_239.ico'],
 )
