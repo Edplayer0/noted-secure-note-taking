@@ -14,10 +14,11 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from log_function import log
 
-# Archivos de la aplicacion
+# ARCHIVOS DE LA APLICACION
 
+# Identificar el estado de la ejecucion
 if getattr(sys, "frozen", False):
-    # Identifica si esta en uso
+    # Si esta en uso
     PASSWORD_FILE = "E:\\Programas\\NotEd\\password.json"
     NOTES_FILE = "E:\\Programas\\NotEd\\notas.json"
     BACKUP_FILE = "E:\\Programas\\NotEd\\Backup\\backup.json"
@@ -25,7 +26,7 @@ if getattr(sys, "frozen", False):
     ICON = f"{sys._MEIPASS}\\icon.ico"
     log(LOG_FILE, "APLICACION EN ESTADO DE USO")
 else:
-    # Identifica si esta en desarrollo
+    # Si esta en desarrollo
     PASSWORD_FILE = f"{sys.prefix}\\..\\src\\password.json"
     NOTES_FILE = f"{sys.prefix}\\..\\src\\notas.json"
     BACKUP_FILE = f"{sys.prefix}\\..\\src\\Backup\\backup.json"
@@ -43,7 +44,7 @@ notas_frames: dict = {}
 # VERIFICACION DE CONTRASENA
 
 
-def verificar_contrasena(password):
+def verificar_contrasena(password: bytearray) -> None:
     global datosp
 
     try:
@@ -51,7 +52,7 @@ def verificar_contrasena(password):
             datosp = json.load(passw)
     except Exception as e:
         log(LOG_FILE, f"ERROR AL ABRIR EL ARCHIVO: {e}")
-        exit()
+        sys.exit()
 
     truepass = base64.urlsafe_b64decode(datosp[0])
     salt1 = base64.urlsafe_b64decode(datosp[1])
@@ -94,7 +95,7 @@ def verificar_contrasena(password):
 # CAMBIAR LOS FRAMES
 
 
-def next_frame():
+def next_frame() -> None:
     global af
 
     try:
@@ -103,10 +104,10 @@ def next_frame():
         af += 1
         notas_frames[af].pack(fill="both", expand=True)
     except KeyError:
-        return
+        pass
 
 
-def prev_frame():
+def prev_frame() -> None:
     global af
 
     try:
@@ -115,13 +116,13 @@ def prev_frame():
         af -= 1
         notas_frames[af].pack(fill="both", expand=True)
     except KeyError:
-        return
+        pass
 
 
 # GUARDAR
 
 
-def guardar(opciones):
+def guardar(opciones: int) -> None:
 
     global titulo_original, notasjson
 
@@ -157,14 +158,14 @@ def guardar(opciones):
 # ATRAS
 
 
-def atras():
+def atras() -> None:
 
     global notas_frames
 
     if editor_entry.get().strip() == "Título de la nota..." or editor_entry.get().strip() == "":
         messagebox.showerror("Error", "El titulo no puede estar vacio")
         return
-    opciones = 0
+    opciones: int = 0
     if titulo_original == editor_entry.get():
         # TITULO IGUAL
         opciones = 1
@@ -186,7 +187,7 @@ def atras():
     boton_menu.pack(side="right")
 
     for item in notas_frames.items():
-        notas_frames[item[0]].destroy()
+        item[1].destroy()
 
     del notas_frames
     notas_frames = {}
@@ -207,6 +208,7 @@ def borrar_nota():
             del notasjson[titulo_safe]
             with open(NOTES_FILE, "w", encoding="UTF-8") as notas:
                 json.dump(notasjson, notas, indent=4)
+            log(LOG_FILE, "NOTA ELIMINADA")
         else:
             return
 
@@ -451,37 +453,43 @@ def inicio():
     with open(NOTES_FILE, "r", encoding="UTF-8") as notas:
         notasjson = json.load(notas)
 
-    t = 0
+    note_count = 0
     f = 0
     f_i = int(str(f)[0])
 
     # CARGAR NOTAS
 
-    for titulo_dict in notasjson.keys():
-        try:
-            type(notas_frames[f_i])
-        except KeyError:
-            notas_frames[f_i] = tkinter.Frame(ventana, bg="white")
-            notas_frames[f_i].columnconfigure(0, weight=1, uniform="group1")
-            notas_frames[f_i].columnconfigure(1, weight=1, uniform="group1")
-            notas_frames[f_i].rowconfigure(0, weight=1, uniform="group2")
-            notas_frames[f_i].rowconfigure(1, weight=1, uniform="group2")
-            c = 0
-            r = 0
+    try:
+        for titulo_dict in notasjson.keys():
+            try:
+                type(notas_frames[f_i])
+            except KeyError:
+                notas_frames[f_i] = tkinter.Frame(ventana, bg="white")
+                notas_frames[f_i].columnconfigure(
+                    0, weight=1, uniform="group1")
+                notas_frames[f_i].columnconfigure(
+                    1, weight=1, uniform="group1")
+                notas_frames[f_i].rowconfigure(0, weight=1, uniform="group2")
+                notas_frames[f_i].rowconfigure(1, weight=1, uniform="group2")
+                c = 0
+                r = 0
 
-        notas_labels = tkinter.Label(notas_frames[f_i], text=cipher.decrypt(base64.urlsafe_b64decode(titulo_dict)).decode('utf-8'), font=(
-            "Segoe Script", "15"), relief="solid", borderwidth=1, bg="white")
-        notas_labels.bind(
-            "<Button-1>", lambda event, x=titulo_dict: show_editor(event, x))
-        notas_labels.grid(column=c, row=r, sticky="nsew", padx=1, pady=1)
-        if c == 0:
-            c += 1
-        else:
-            c = 0
-            r += 1
-        f += 0.25
-        f_i = int(f)
-        t += 1
+            notas_labels = tkinter.Label(notas_frames[f_i], text=cipher.decrypt(base64.urlsafe_b64decode(titulo_dict)).decode('utf-8'), font=(
+                "Segoe Script", "15"), relief="solid", borderwidth=1, bg="white")
+            notas_labels.bind(
+                "<Button-1>", lambda event, x=titulo_dict: show_editor(event, x))
+            notas_labels.grid(column=c, row=r, sticky="nsew", padx=1, pady=1)
+            if c == 0:
+                c += 1
+            else:
+                c = 0
+                r += 1
+            f += 0.25
+            f_i = int(f)
+            note_count += 1
+        log(LOG_FILE, f"{note_count} NOTAS CARGADAS CORRECTAMENTE")
+    except Exception as e:
+        log(LOG_FILE, f"ERROR AL CARGAR NOTAS: {e}")
 
     # MOSTRAR NOTAS
 
@@ -493,7 +501,7 @@ def inicio():
             notas_frames[af-1].pack(fill="both", expand=True)
             af -= 1
         except KeyError:
-            pass
+            log(LOG_FILE, "NADA QUE MOSTRAR")
 
 
 # MOSTRAR FOOTER
