@@ -1,3 +1,5 @@
 src/notas.json
 src/Backup/backup.json
+src/log.txt
 .venv
+__pycache__/
