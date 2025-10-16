@@ -271,6 +271,7 @@ def backup():
 ventana = tkinter.Tk()
 ventana.title("NotEd: Notas de alta seguridad")
 ventana.geometry("400x500")
+ventana.iconbitmap(ICON)
 
 # INICIO DE SESION
 
