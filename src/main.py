@@ -7,6 +7,7 @@ import base64
 import tkinter
 from tkinter import ttk
 from tkinter import messagebox
+from os.path import dirname, abspath
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import constant_time
@@ -16,22 +17,24 @@ from log_function import log
 
 # ARCHIVOS DE LA APLICACION
 
+PATH = dirname(abspath(__file__))
+
 # Identificar el estado de la ejecucion
 if getattr(sys, "frozen", False):
     # Si esta en uso
-    PASSWORD_FILE = "E:\\Programas\\NotEd\\password.json"
-    NOTES_FILE = "E:\\Programas\\NotEd\\notas.json"
-    BACKUP_FILE = "E:\\Programas\\NotEd\\Backup\\backup.json"
-    LOG_FILE = "E:\\Programas\\NotEd\\log.txt"
-    ICON = f"{sys._MEIPASS}\\icon.ico"
+    PASSWORD_FILE = PATH + "\\password.json"
+    NOTES_FILE = PATH + "\\notas.json"
+    BACKUP_FILE = PATH + "\\Backup\\backup.json"
+    LOG_FILE = PATH + "\\log.txt"
+    ICON = f"{sys.MEIPASS}\\icon.ico"
     log(LOG_FILE, "APLICACION EN ESTADO DE USO")
 else:
     # Si esta en desarrollo
-    PASSWORD_FILE = f"{sys.prefix}\\..\\src\\password.json"
-    NOTES_FILE = f"{sys.prefix}\\..\\src\\notas.json"
-    BACKUP_FILE = f"{sys.prefix}\\..\\src\\Backup\\backup.json"
-    LOG_FILE = f"{sys.prefix}\\..\\src\\log.txt"
-    ICON = f"{sys.prefix}\\..\\src\\icon.ico"
+    PASSWORD_FILE = f"{PATH}\\password.json"
+    NOTES_FILE = f"{PATH}\\notas.json"
+    BACKUP_FILE = f"{PATH}\\Backup\\backup.json"
+    LOG_FILE = f"{PATH}\\log.txt"
+    ICON = f"{PATH}\\icon.ico"
     log(LOG_FILE, "APLICACION EN ESTADO DE DESARROLLO")
 
 # Variables globales
