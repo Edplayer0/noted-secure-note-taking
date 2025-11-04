@@ -40,7 +40,7 @@ else:
 # Variables globales
 
 af: int = 0
-titulo_safe = None
+titulo_dict = None
 notas_frames: dict = {}
 
 
@@ -127,11 +127,11 @@ def prev_frame() -> None:
 
 def guardar(opciones: int) -> None:
 
-    global titulo_original, notasjson
+    global notasjson
 
     match opciones:
         case 1:
-            notasjson[titulo_safe] = base64.urlsafe_b64encode(
+            notasjson[titulo_dict] = base64.urlsafe_b64encode(
                 cipher.encrypt(editor_text.get("1.0", "end-1c").rstrip().encode())).decode('utf-8')
 
             with open(NOTES_FILE, "w", encoding="UTF-8") as notas:
@@ -208,7 +208,7 @@ def borrar_nota():
         )
         if confirmacion:
             global notasjson
-            del notasjson[titulo_safe]
+            del notasjson[titulo_dict]
             with open(NOTES_FILE, "w", encoding="UTF-8") as notas:
                 json.dump(notasjson, notas, indent=4)
             log(LOG_FILE, "NOTA ELIMINADA")
@@ -339,7 +339,7 @@ flecha_derecha = tkinter.Button(footer, text=">", bd=0, relief="flat",
                                 bg="#FFEE8C", fg="white", font="Arial 27", cursor="hand2", command=next_frame)
 flecha_derecha.grid(column=4, row=0, sticky="nsew")
 nueva_nota = tkinter.Button(footer, text="+", bd=0, relief="flat",
-                            bg="#FFEE8C", fg="white", font="Arial 27", cursor="hand2", command=lambda: show_editor("", ""))
+                            bg="#FFEE8C", fg="white", font="Arial 27", cursor="hand2", command=lambda: show_editor(label_titulo=""))
 nueva_nota.grid(column=2, row=0, sticky="nsew")
 
 # EDITOR
@@ -393,14 +393,11 @@ def on_entry_focus_in(event):
         editor_entry.config(fg='black')
 
 
-def show_editor(event, label_titulo):
-    global titulo_original, titulo_safe
-    if label_titulo != "":
-        titulo_original = cipher.decrypt(
-            base64.urlsafe_b64decode(label_titulo)).decode('utf-8')
-        titulo_safe = label_titulo
-    else:
-        titulo_original = label_titulo
+def show_editor(titulo_dict_local=False, label_titulo=False):
+    global titulo_original, titulo_dict
+
+    titulo_original = label_titulo
+    titulo_dict = titulo_dict_local
 
     # ESTO ES POR SI NO HAY NOTAS
     try:
@@ -426,7 +423,7 @@ def show_editor(event, label_titulo):
         editor_entry.insert(0, titulo_original)
         editor_text.insert(
             "1.0", cipher.decrypt(base64.urlsafe_b64decode(
-                notasjson[label_titulo])).decode('utf-8'))
+                notasjson[titulo_dict])).decode('utf-8'))
 
     ventana.update_idletasks()
 
@@ -480,7 +477,7 @@ def inicio():
             notas_labels = tkinter.Label(notas_frames[f_i], text=cipher.decrypt(base64.urlsafe_b64decode(titulo_dict)).decode('utf-8'), font=(
                 "Segoe Script", "15"), relief="solid", borderwidth=1, bg="white")
             notas_labels.bind(
-                "<Button-1>", lambda event, x=titulo_dict: show_editor(event, x))
+                "<Button-1>", lambda event, x=titulo_dict: show_editor(titulo_dict_local=x, label_titulo=notas_labels.cget('text')))
             notas_labels.grid(column=c, row=r, sticky="nsew", padx=1, pady=1)
             if c == 0:
                 c += 1
