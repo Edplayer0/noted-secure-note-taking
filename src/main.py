@@ -22,20 +22,28 @@ PATH = dirname(abspath(__file__))
 # Identificar el estado de la ejecucion
 if getattr(sys, "frozen", False):
     # Si esta en uso
-    PASSWORD_FILE = PATH + "\\password.json"
-    NOTES_FILE = PATH + "\\notas.json"
-    BACKUP_FILE = PATH + "\\Backup\\backup.json"
-    LOG_FILE = PATH + "\\log.txt"
-    ICON = f"{sys._MEIPASS}\\icon.ico"
-    log(LOG_FILE, "APLICACION EN ESTADO DE USO")
+    PATH = dirname(sys.executable)
+    try:
+        PASSWORD_FILE = f"{PATH}\\password.json"
+        NOTES_FILE = f"{PATH}\\notas.json"
+        BACKUP_FILE = f"{PATH}\\Backup\\backup.json"
+        LOG_FILE = f"{PATH}\\log.txt"
+        ICON = f"{sys._MEIPASS}\\icon.ico"
+        log(LOG_FILE, "APLICACION EN ESTADO DE USO")
+    except Exception as e:
+        messagebox.showerror("Error", e)
 else:
     # Si esta en desarrollo
-    PASSWORD_FILE = f"{PATH}\\password.json"
-    NOTES_FILE = f"{PATH}\\notas.json"
-    BACKUP_FILE = f"{PATH}\\Backup\\backup.json"
-    LOG_FILE = f"{PATH}\\log.txt"
-    ICON = f"{PATH}\\icon.ico"
-    log(LOG_FILE, "APLICACION EN ESTADO DE DESARROLLO")
+    try:
+        PASSWORD_FILE = f"{PATH}\\password.json"
+        NOTES_FILE = f"{PATH}\\notas.json"
+        BACKUP_FILE = f"{PATH}\\Backup\\backup.json"
+        LOG_FILE = f"{PATH}\\log.txt"
+        ICON = f"{PATH}\\icon.ico"
+        log(LOG_FILE, "APLICACION EN ESTADO DE DESARROLLO")
+    except Exception as e:
+        messagebox.showerror("Error", e)
+
 
 # Variables globales
 
