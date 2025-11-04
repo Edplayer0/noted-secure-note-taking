@@ -26,7 +26,7 @@ if getattr(sys, "frozen", False):
     NOTES_FILE = PATH + "\\notas.json"
     BACKUP_FILE = PATH + "\\Backup\\backup.json"
     LOG_FILE = PATH + "\\log.txt"
-    ICON = f"{sys.MEIPASS}\\icon.ico"
+    ICON = f"{sys._MEIPASS}\\icon.ico"
     log(LOG_FILE, "APLICACION EN ESTADO DE USO")
 else:
     # Si esta en desarrollo
