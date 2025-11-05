@@ -485,7 +485,7 @@ def inicio():
             notas_labels = tkinter.Label(notas_frames[f_i], text=cipher.decrypt(base64.urlsafe_b64decode(titulo_dict)).decode('utf-8'), font=(
                 "Segoe Script", "15"), relief="solid", borderwidth=1, bg="white")
             notas_labels.bind(
-                "<Button-1>", lambda event, x=titulo_dict: show_editor(titulo_dict_local=x, label_titulo=notas_labels.cget('text')))
+                "<Button-1>", lambda event, x=titulo_dict, label=notas_labels.cget('text'): show_editor(titulo_dict_local=x, label_titulo=label))
             notas_labels.grid(column=c, row=r, sticky="nsew", padx=1, pady=1)
             if c == 0:
                 c += 1
