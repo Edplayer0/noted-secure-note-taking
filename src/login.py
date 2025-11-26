@@ -26,7 +26,7 @@ class Login(tk.Frame):
 
         self.boton_login = ttk.Button(
             self.login_box, text="Enviar",
-            command=lambda: master.verifier.verify(
+            command=lambda: master.password_manager.verify(
                 bytearray(self.entrada_contrasena.get().encode())),
             state="disabled")
         self.boton_login.pack(pady=30)

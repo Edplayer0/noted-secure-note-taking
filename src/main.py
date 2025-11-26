@@ -1,6 +1,5 @@
 from app import App
 from login import Login
-from verifier import PasswordVerifier
 from dashboard.dashboard import Dashboard
 from functions.files import app_files
 from managers.database_manager import DatabaseManager
@@ -13,7 +12,7 @@ files = app_files()
 def main():
 
     # Objeto de la aplicacion
-    app = App(files, Login, PasswordVerifier,
+    app = App(files, Login,
               DatabaseManager, Dashboard, PasswordManager)
 
     # Muestra el login

@@ -2,7 +2,7 @@ from tkinter import Tk
 
 
 class App(Tk):
-    def __init__(self, files, Login, PasswordVerifier, DatabaseManager, Dashboard, PasswordManager):
+    def __init__(self, files, Login, DatabaseManager, Dashboard, PasswordManager):
         super().__init__()
 
         self.title("NotEd: Notas de alta seguridad")
@@ -20,8 +20,6 @@ class App(Tk):
         self.login = Login(self)
 
         self.password_manager = PasswordManager(self)
-
-        self.verifier = PasswordVerifier(self)
 
         self.dashboard = Dashboard(self)
 

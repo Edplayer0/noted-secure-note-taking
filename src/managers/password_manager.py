@@ -1,9 +1,108 @@
+import os
+import gc
+import json
+import base64
+
+from tkinter import messagebox
+
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives.hashes import SHA256
+from cryptography.hazmat.primitives import constant_time
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+from managers.cipher import Cipher
+from managers.new_password.new_password_gui import NewPassword
+
+
 class PasswordManager:
 
     def __init__(self, app):
 
         self.app = app
 
+        self.password_file = self.app.files["PASSWORD_FILE"]
+
+        with open(self.password_file, "r", encoding="UTF-8") as passw:
+            self.password_data = json.load(passw)
+
+        if self.password_data:
+
+            self.truepass = base64.urlsafe_b64decode(self.password_data[0])
+            self.salt1 = base64.urlsafe_b64decode(self.password_data[1])
+            self.salt2 = base64.urlsafe_b64decode(self.password_data[2])
+
+            self.app.login.boton_login.configure(state="normal")
+
+        else:
+
+            self.new_password()
+
+    def verify(self, user_pass):
+
+        derivacion1 = PBKDF2HMAC(
+            algorithm=SHA256(),
+            length=32,
+            salt=self.salt1,
+            iterations=200000
+        )
+        derivacion2 = PBKDF2HMAC(
+            algorithm=SHA256(),
+            length=32,
+            salt=self.salt2,
+            iterations=200000
+        )
+
+        try:
+            posible_pass = derivacion1.derive(bytes(user_pass))
+            notas_pass = derivacion2.derive(bytes(user_pass))
+        finally:
+            for datos in enumerate(user_pass):
+                index = datos[0]
+                user_pass[index] = 0
+            del user_pass
+            gc.collect()
+
+        if constant_time.bytes_eq(posible_pass, self.truepass):
+            del posible_pass
+            cipher = Fernet(base64.urlsafe_b64encode(notas_pass))
+            del notas_pass
+            self.app.cipher = Cipher(cipher)
+            gc.collect()
+
+            self.app.start()
+
+        else:
+            messagebox.showerror("Error", "Contraseña incorrecta")
+
     def new_password(self):
 
-        pass
+        new_windows = NewPassword(self.app)
+
+    def generate(self, password):
+
+        salt1 = os.urandom(16)
+        salt2 = os.urandom(16)
+
+        derivacion = PBKDF2HMAC(
+            algorithm=SHA256(),
+            length=32,
+            salt=salt1,
+            iterations=200000
+        )
+
+        new_pass = derivacion.derive(password.encode("UTF-8"))
+
+        self.truepass = new_pass
+        self.salt1 = salt1
+        self.salt2 = salt2
+
+        json_data = [base64.urlsafe_b64encode(
+            new_pass).decode("UTF-8"), base64.urlsafe_b64encode(
+            salt1).decode("UTF-8"), base64.urlsafe_b64encode(
+            salt2).decode("UTF-8")]
+
+        with open(self.password_file, "w", encoding="UTF-8") as file:
+
+            json.dump(json_data, file, indent=4)
+
+        self.app.login.boton_login.configure(state="normal")
