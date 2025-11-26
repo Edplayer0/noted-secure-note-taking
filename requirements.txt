@@ -1,3 +1,10 @@
+altgraph==0.17.4
 cffi==2.0.0
 cryptography==46.0.2
+customtkinter==5.2.2
+darkdetect==0.8.0
+packaging==25.0
+pefile==2023.2.7
 pycparser==2.23
+pywin32-ctypes==0.2.3
+setuptools==80.9.0

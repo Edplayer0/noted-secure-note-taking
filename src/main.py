@@ -12,8 +12,7 @@ files = app_files()
 def main():
 
     # Objeto de la aplicacion
-    app = App(files, Login,
-              DatabaseManager, Dashboard, PasswordManager)
+    app = App(files, Login, DatabaseManager, Dashboard, PasswordManager)
 
     # Muestra el login
     app.login.enter()
