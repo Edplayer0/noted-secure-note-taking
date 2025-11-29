@@ -1,7 +1,6 @@
-import os
 import gc
-import json
 import base64
+import secrets
 
 from tkinter import messagebox
 
@@ -74,8 +73,8 @@ class PasswordManager:
 
     def generate(self, password):
 
-        salt1 = os.urandom(16)
-        salt2 = os.urandom(16)
+        salt1 = secrets.token_bytes(16)
+        salt2 = secrets.token_bytes(16)
 
         derivacion = PBKDF2HMAC(
             algorithm=SHA256(), length=32, salt=salt1, iterations=200000
