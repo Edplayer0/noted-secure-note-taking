@@ -23,7 +23,7 @@ class App(Tk):
 
         self.dashboard = Dashboard(self)
 
-    def start(self):
+    def start(self) -> None:
 
         self.login.exit()
 

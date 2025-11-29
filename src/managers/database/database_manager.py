@@ -15,12 +15,14 @@ class DatabaseManager:
 
             cursor = conn.cursor()
 
-            response = cursor.execute(
-                "SELECT * FROM Notes ORDER BY NoteId DESC;")
+            response = cursor.execute("SELECT * FROM Notes ORDER BY NoteId DESC;")
 
             notes = response.fetchall()
 
-        return [(note[0], self.app.cipher.decode(note[1]), self.app.cipher.decode(note[2])) for note in notes]
+        return [
+            (note[0], self.app.cipher.decode(note[1]), self.app.cipher.decode(note[2]))
+            for note in notes
+        ]
 
     def add_note(self, data):
 
@@ -30,7 +32,8 @@ class DatabaseManager:
 
             cursor.execute(
                 "INSERT INTO notes ('NoteTitle', 'NoteContent') VALUES (?, ?)",
-                (self.app.cipher.encode(data[0]), self.app.cipher.encode(data[1])))
+                (self.app.cipher.encode(data[0]), self.app.cipher.encode(data[1])),
+            )
 
     def modify_note(self, data):
 
@@ -40,7 +43,12 @@ class DatabaseManager:
 
             cursor.execute(
                 "UPDATE notes SET NoteTitle=?, NoteContent=? WHERE NoteId = ?;",
-                (self.app.cipher.encode(data[1]), self.app.cipher.encode(data[2]), data[0]))
+                (
+                    self.app.cipher.encode(data[1]),
+                    self.app.cipher.encode(data[2]),
+                    data[0],
+                ),
+            )
 
     def delete_note(self, note_id):
 
@@ -48,5 +56,4 @@ class DatabaseManager:
 
             cursor = conn.cursor()
 
-            cursor.execute(
-                "DELETE FROM Notes WHERE NoteId = ?;", (note_id,))
+            cursor.execute("DELETE FROM Notes WHERE NoteId = ?;", (note_id,))

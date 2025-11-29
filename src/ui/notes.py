@@ -17,7 +17,7 @@ class Note(ctk.CTkFrame):
         self.title_label.pack(pady=20, padx=10)
 
         self.date_label = ctk.CTkLabel(
-            self, text=self.content[:11],
+            self, text=self.content[:10],
             font=ctk.CTkFont(family="Arial", size=17, underline=True)
         )
         self.date_label.pack()

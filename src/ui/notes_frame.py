@@ -1,4 +1,4 @@
-from notes.notes import Note
+from ui.notes import Note
 from customtkinter import CTkFrame, set_appearance_mode
 
 set_appearance_mode("light")

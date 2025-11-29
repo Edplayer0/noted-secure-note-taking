@@ -1,7 +1,7 @@
-from dashboard.editor import Editor
-from dashboard.header import Header
-from dashboard.footer.footer import Footer
-from dashboard.frame_manager import FrameManager
+from ui.editor import Editor
+from ui.header import Header
+from ui.footer.footer import Footer
+from ui.frame_manager import FrameManager
 
 from tkinter import Frame
 

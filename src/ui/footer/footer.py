@@ -2,9 +2,9 @@ from tkinter import Frame
 
 from customtkinter import CTkFrame
 
-from dashboard.footer.new_button import NewButton
-from dashboard.footer.prev_button import PrevButton
-from dashboard.footer.next_button import NextButton
+from ui.footer.new_button import NewButton
+from ui.footer.prev_button import PrevButton
+from ui.footer.next_button import NextButton
 
 
 class Footer(Frame):
@@ -24,8 +24,9 @@ class Footer(Frame):
         self.inner_frame.columnconfigure(1, weight=1, uniform="group1")
         self.inner_frame.columnconfigure(2, weight=1, uniform="group1")
 
-        self.inner_frame.grid(column=1, row=0, sticky="nsew",
-                              columnspan=3, pady=10, padx=10)
+        self.inner_frame.grid(
+            column=1, row=0, sticky="nsew", columnspan=3, pady=10, padx=10
+        )
 
         self.new_button = NewButton(self.inner_frame, master)
         self.new_button.grid(column=1, row=0, sticky="nsew", pady=10, padx=10)

@@ -1,15 +1,15 @@
 from app import App
-from login import Login
-from dashboard.dashboard import Dashboard
+from ui.login import Login
+from ui.dashboard import Dashboard
 from functions.files import app_files
-from managers.database_manager import DatabaseManager
-from managers.password_manager import PasswordManager
+from managers.database.database_manager import DatabaseManager
+from managers.password.password_manager import PasswordManager
 
 # Archivos de la aplicacion
 files = app_files()
 
 
-def main():
+def main() -> None:
 
     # Objeto de la aplicacion
     app = App(files, Login, DatabaseManager, Dashboard, PasswordManager)

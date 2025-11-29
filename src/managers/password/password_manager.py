@@ -10,8 +10,9 @@ from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives import constant_time
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from managers.cipher import Cipher
-from managers.new_password.new_password_gui import NewPassword
+from managers.encryption.cipher import Cipher
+from managers.password.new_password_gui import NewPassword
+from managers.password.key_manager import KeyManager
 
 
 class PasswordManager:
@@ -22,14 +23,13 @@ class PasswordManager:
 
         self.password_file = self.app.files["PASSWORD_FILE"]
 
-        with open(self.password_file, "r", encoding="UTF-8") as passw:
-            self.password_data = json.load(passw)
+        self.key_manager = KeyManager(self.password_file)
+
+        self.password_data = self.key_manager.load_keys()
 
         if self.password_data:
 
-            self.truepass = base64.urlsafe_b64decode(self.password_data[0])
-            self.salt1 = base64.urlsafe_b64decode(self.password_data[1])
-            self.salt2 = base64.urlsafe_b64decode(self.password_data[2])
+            self.truepass, self.salt1, self.salt2 = self.password_data
 
             self.app.login.boton_login.configure(state="normal")
 
@@ -40,16 +40,10 @@ class PasswordManager:
     def verify(self, user_pass):
 
         derivacion1 = PBKDF2HMAC(
-            algorithm=SHA256(),
-            length=32,
-            salt=self.salt1,
-            iterations=200000
+            algorithm=SHA256(), length=32, salt=self.salt1, iterations=200000
         )
         derivacion2 = PBKDF2HMAC(
-            algorithm=SHA256(),
-            length=32,
-            salt=self.salt2,
-            iterations=200000
+            algorithm=SHA256(), length=32, salt=self.salt2, iterations=200000
         )
 
         try:
@@ -76,7 +70,7 @@ class PasswordManager:
 
     def new_password(self):
 
-        new_windows = NewPassword(self.app)
+        NewPassword(self.app)
 
     def generate(self, password):
 
@@ -84,10 +78,7 @@ class PasswordManager:
         salt2 = os.urandom(16)
 
         derivacion = PBKDF2HMAC(
-            algorithm=SHA256(),
-            length=32,
-            salt=salt1,
-            iterations=200000
+            algorithm=SHA256(), length=32, salt=salt1, iterations=200000
         )
 
         new_pass = derivacion.derive(password.encode("UTF-8"))
@@ -96,13 +87,6 @@ class PasswordManager:
         self.salt1 = salt1
         self.salt2 = salt2
 
-        json_data = [base64.urlsafe_b64encode(
-            new_pass).decode("UTF-8"), base64.urlsafe_b64encode(
-            salt1).decode("UTF-8"), base64.urlsafe_b64encode(
-            salt2).decode("UTF-8")]
-
-        with open(self.password_file, "w", encoding="UTF-8") as file:
-
-            json.dump(json_data, file, indent=4)
+        self.key_manager.save_keys(new_pass, salt1, salt2)
 
         self.app.login.boton_login.configure(state="normal")

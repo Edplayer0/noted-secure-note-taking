@@ -1,4 +1,4 @@
-from dashboard.notes_frame import NotesFrame
+from ui.notes_frame import NotesFrame
 from math import ceil
 
 
@@ -25,11 +25,11 @@ class FrameManager:
 
         notes_count = 0
 
-        for n in range(ceil(len(notes)/4)):
+        for n in range(ceil(len(notes) / 4)):
 
-            frame = NotesFrame(self.dashboard_frame,
-                               self.app,
-                               notes[notes_count:notes_count+4])
+            frame = NotesFrame(
+                self.dashboard_frame, self.app, notes[notes_count : notes_count + 4]
+            )
 
             self.notes_frames.append(frame)
 
@@ -48,7 +48,7 @@ class FrameManager:
     def next_frame(self):
 
         try:
-            self.notes_frames[self.current_frame+1].show()
+            self.notes_frames[self.current_frame + 1].show()
             self.notes_frames[self.current_frame].hide()
             self.current_frame += 1
 
@@ -61,7 +61,7 @@ class FrameManager:
 
             if self.current_frame != 0:
 
-                self.notes_frames[self.current_frame-1].show()
+                self.notes_frames[self.current_frame - 1].show()
                 self.notes_frames[self.current_frame].hide()
 
                 self.current_frame -= 1
