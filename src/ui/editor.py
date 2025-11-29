@@ -21,9 +21,6 @@ class Editor(tk.Frame):
         )
         self.editor_entry.pack(fill="x", padx=10, pady=10)
 
-        # Bind para detectar cambios
-        self.editor_entry.bind("<KeyRelease>", self._on_content_change)
-
         # Frame para el área de texto con scroll
         self.editor_text_frame = tk.Frame(self)
         self.editor_text_frame.columnconfigure(0, weight=1)
@@ -40,18 +37,11 @@ class Editor(tk.Frame):
         )
         self.editor_text.grid(column=0, row=0, sticky="nsew")
 
-        # Bind para detectar cambios en el texto
-        self.editor_text.bind("<KeyRelease>", self._on_content_change)
-
         self.scroll = CTkScrollbar(
             self.editor_text_frame, command=self.editor_text.yview, bg_color="white"
         )
         self.scroll.grid(column=1, row=0, sticky="ns")
         self.editor_text.configure(yscrollcommand=self.scroll.set)
-
-    def _on_content_change(self, event=None):
-        """Método para manejar cambios en el contenido"""
-        # Puedes usar esto para guardado automático o validación
 
     def enter(self, data=False):
         """Mostrar el editor y preparar para edición"""
@@ -86,6 +76,8 @@ class Editor(tk.Frame):
             self.editor_text.insert("1.0", content)
 
             self.update_idletasks()
+
+        self.editor_text.focus_set()
 
     def save(self):
         """Guardar cambios"""
