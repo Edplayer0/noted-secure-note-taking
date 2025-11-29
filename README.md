@@ -34,4 +34,5 @@ NotEd/
 │
 ├── assets/                  # Static files (icons, images, etc.)
 ├── requirements.txt         # Project dependencies
-└── README.md                # Project documentation
+├── README.md                # Project documentation
+└── LICENCE                  # Project licence

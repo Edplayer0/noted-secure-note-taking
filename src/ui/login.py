@@ -39,7 +39,7 @@ class Login(tk.Frame):
 
         self.copylabel = tk.Label(
             self.login_box,
-            text="EdgarProblem ©2025. Todos los derechos reservados.",
+            text="© 2025 Edgar Ayuso Martínez. Released under the MIT Licence.",
             font=("Arial", "8"),
             fg="gray",
         )

@@ -5,7 +5,7 @@ class App(Tk):
     def __init__(self, files, Login, DatabaseManager, Dashboard, PasswordManager):
         super().__init__()
 
-        self.title("NotEd: Notas de alta seguridad")
+        self.title("NotEd: Encrypted Note-Taking")
         self.geometry("450x500")
         self.config(bg="white")
 
