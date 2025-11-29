@@ -1,4 +1,5 @@
 import tkinter as tk
+from customtkinter import CTkScrollbar
 
 
 class Editor(tk.Frame):
@@ -42,8 +43,8 @@ class Editor(tk.Frame):
         # Bind para detectar cambios en el texto
         self.editor_text.bind("<KeyRelease>", self._on_content_change)
 
-        self.scroll = tk.Scrollbar(
-            self.editor_text_frame, command=self.editor_text.yview
+        self.scroll = CTkScrollbar(
+            self.editor_text_frame, command=self.editor_text.yview, bg_color="white"
         )
         self.scroll.grid(column=1, row=0, sticky="ns")
         self.editor_text.configure(yscrollcommand=self.scroll.set)

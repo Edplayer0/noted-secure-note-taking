@@ -16,9 +16,9 @@ class Header(tk.Frame):
             self,
             text="NotEd",
             bg="#FFEE8C",
-            font="Arial 23",
+            font=("Arial", 23, "bold"),
             pady=5,
-            padx=10,
+            padx=15,
             fg="white",
         )
         self.menu_button = tk.Button(
@@ -48,14 +48,13 @@ class Header(tk.Frame):
         )
         self.delete_button = tk.Button(
             self,
-            text="X",
+            text="",
             bd=0,
             relief="flat",
             bg="#FFEE8C",
             fg="white",
-            pady=5,
             padx=10,
-            font="Arial 23",
+            font=("Segoe UI Symbol", 23),
             cursor="hand2",
             command=lambda: delete_note(master),
         )

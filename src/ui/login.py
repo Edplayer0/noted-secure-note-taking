@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+import customtkinter as ctk
 
 
 class Login(tk.Frame):
@@ -7,41 +7,56 @@ class Login(tk.Frame):
         super().__init__(master)
 
         self.header = tk.Label(
-            self, fg="white", bg="#FFEE8C", font=("Segoe Script", "35"), text="NotEd"
+            self,
+            fg="white",
+            bg="#FFEE8C",
+            font=ctk.CTkFont(family="Segoe Script", size=35),
+            text="NotEd",
         )
         self.header.pack(fill="x")
 
-        self.login_box = tk.Frame(self, border=1, relief="solid")
+        self.login_box = ctk.CTkFrame(self)
         self.login_box.pack(fill="both", expand=True, pady=30, padx=35)
 
-        self.saludo = tk.Label(
-            self.login_box, text="\nBienvenido", font=("Monotype Corsiva", "25")
+        self.saludo = ctk.CTkLabel(
+            self.login_box,
+            text="\nBienvenido",
+            font=ctk.CTkFont(family="Monotype Corsiva", size=33),
+            padx=2,
+            pady=2,
         )
         self.saludo.pack()
 
-        self.instruccion = tk.Label(
-            self.login_box, text="\n\nIntroduce su contraseña:\n\n", font="Helvetica 15"
+        self.instruccion = ctk.CTkLabel(
+            self.login_box,
+            text="\n\nIntroduce su contraseña:\n\n",
+            font=ctk.CTkFont(family="Helvetica", size=20),
         )
         self.instruccion.pack()
 
-        self.entrada_contrasena = ttk.Entry(self.login_box, show="•")
+        self.entrada_contrasena = ctk.CTkEntry(self.login_box, show="•")
         self.entrada_contrasena.pack()
 
-        self.boton_login = ttk.Button(
+        self.boton_login = ctk.CTkButton(
             self.login_box,
-            text="Enviar",
+            text="",
             command=lambda: master.password_manager.verify(
                 bytearray(self.entrada_contrasena.get().encode())
             ),
             state="disabled",
+            fg_color="#FFEE8C",
+            text_color="white",
+            font=ctk.CTkFont(family="Segoe UI Symbol", size=20),
+            hover_color="gray",
+            width=20,
+            corner_radius=20,
         )
         self.boton_login.pack(pady=30)
 
-        self.copylabel = tk.Label(
+        self.copylabel = ctk.CTkLabel(
             self.login_box,
             text="© 2025 Edgar Ayuso Martínez. Released under the MIT Licence.",
-            font=("Arial", "8"),
-            fg="gray",
+            font=ctk.CTkFont(family="Arial", size=11),
         )
         self.copylabel.pack(side="bottom")
 

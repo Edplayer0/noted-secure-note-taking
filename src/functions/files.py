@@ -20,7 +20,6 @@ def app_files():
             files["BACKUP_FILE"] = f"{file_path}\\Backup\\backup.json"
             files["LOG_FILE"] = f"{file_path}\\log.txt"
             files["ICON"] = f"{sys._MEIPASS}\\bitmap.ico"
-            # log(LOG_FILE, "APLICACION EN ESTADO DE USO")
         except Exception as e:
             messagebox.showerror("Error", e)
     else:
@@ -31,7 +30,6 @@ def app_files():
             files["BACKUP_FILE"] = f"{file_path}\\Backup\\backup.json"
             files["LOG_FILE"] = f"{file_path}\\log.txt"
             files["ICON"] = "E:\\Proyectos\\NotEd\\assets\\bitmap.ico"
-            # log(LOG_FILE, "APLICACION EN ESTADO DE DESARROLLO")
         except Exception as e:
             messagebox.showerror("Error", e)
 
