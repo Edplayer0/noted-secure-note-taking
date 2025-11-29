@@ -30,7 +30,7 @@ def app_files():
             files["NOTES_FILE"] = f"{file_path}\\notas.db"
             files["BACKUP_FILE"] = f"{file_path}\\Backup\\backup.json"
             files["LOG_FILE"] = f"{file_path}\\log.txt"
-            files["ICON"] = "E:\\Proyectos\\NotEd\\static\\bitmap.ico"
+            files["ICON"] = "E:\\Proyectos\\NotEd\\assets\\bitmap.ico"
             # log(LOG_FILE, "APLICACION EN ESTADO DE DESARROLLO")
         except Exception as e:
             messagebox.showerror("Error", e)
