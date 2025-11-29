@@ -25,7 +25,7 @@ class FrameManager:
 
         notes_count = 0
 
-        for n in range(ceil(len(notes) / 4)):
+        for _ in range(ceil(len(notes) / 4)):
 
             frame = NotesFrame(
                 self.dashboard_frame, self.app, notes[notes_count : notes_count + 4]
@@ -49,22 +49,19 @@ class FrameManager:
 
         try:
             self.notes_frames[self.current_frame + 1].show()
+        except IndexError:
+            pass
+        else:
             self.notes_frames[self.current_frame].hide()
             self.current_frame += 1
 
-        except IndexError:
-            pass
-
     def prev_frame(self):
 
-        try:
-
-            if self.current_frame != 0:
-
+        if self.current_frame != 0:
+            try:
                 self.notes_frames[self.current_frame - 1].show()
+            except IndexError:
+                pass
+            else:
                 self.notes_frames[self.current_frame].hide()
-
                 self.current_frame -= 1
-
-        except IndexError:
-            pass

@@ -69,7 +69,7 @@ class PasswordManager:
 
     def new_password(self):
 
-        NewPassword(self.app)
+        new_pass = NewPassword(self.app)
 
     def generate(self, password):
 
