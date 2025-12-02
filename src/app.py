@@ -13,7 +13,7 @@ class App(Tk):
 
         self.iconbitmap(files["ICON"])
 
-        self.database_manager = DatabaseManager(self)
+        self.database_manager = DatabaseManager(self.files["DATABASE"])
 
         self.cipher = None
 

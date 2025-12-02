@@ -12,7 +12,7 @@ class Mediator(ABC):
         """Appends a service"""
 
     @abstractmethod
-    def add_event(self, event: str, handler: Callable) -> None:
+    def add_handler(self, event: str, handler: Callable) -> None:
         """Appends a event"""
 
     @abstractmethod

@@ -1,7 +1,10 @@
 """Database communications mediator"""
 
-from typing import Any, List, Dict, Callable
+from typing import Any, List, Dict, Callable, TypeVar
 from mediator.mediator import Mediator
+
+T = TypeVar("T")
+HandlerResult = List[T] | T
 
 
 class DatabaseMediator(Mediator):
@@ -19,7 +22,7 @@ class DatabaseMediator(Mediator):
     def __init__(self):
         if not self._initialized:
             self.services: List[Any] = []
-            self.handlers: Dict[str, Callable] = {}
+            self.handlers: Dict[str, List[Callable]] = {}
 
             self._initialized = True
 
@@ -27,13 +30,27 @@ class DatabaseMediator(Mediator):
         self.services.append(service)
         service.mediator = self
 
-    def add_event(self, event: str, handler: Callable) -> None:
+    def add_handler(self, event: str, handler: Callable) -> None:
         if not event in self.handlers:
-            self.handlers[event] = handler
+            self.handlers[event] = []
+        self.handlers[event].append(handler)
 
-    def call_event(self, event: str, data: Any = None) -> Any:
+    def call_event(self, event: str, data: T | None = None) -> HandlerResult:
+
+        response = []
+
         if event in self.handlers:
-            if data:
-                return self.handlers[event](data)
-            return self.handlers[event]()
-        return None
+            for handler in self.handlers[event]:
+                if data:
+                    result = handler(data)
+                    if result:
+                        response.append(result)
+                else:
+                    result = handler()
+                    if result:
+                        response.append(result)
+
+        if len(response) == 1:
+            response = response[0]
+
+        return response

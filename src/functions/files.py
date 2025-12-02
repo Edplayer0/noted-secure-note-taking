@@ -11,12 +11,12 @@ def app_files():
     files = {}
 
     # Identificar el estado de la ejecucion
-    if getattr(sys, "frozen", False):
+    if hasattr(sys, "frozen"):
         # Si esta en uso
         file_path = dirname(sys.executable)
         try:
             files["PASSWORD_FILE"] = f"{file_path}\\password.json"
-            files["NOTES_FILE"] = f"{file_path}\\notas.db"
+            files["DATABASE"] = f"{file_path}\\notas.db"
             files["BACKUP_FILE"] = f"{file_path}\\Backup\\backup.json"
             files["LOG_FILE"] = f"{file_path}\\log.txt"
             files["ICON"] = f"{sys._MEIPASS}\\bitmap.ico"
@@ -26,7 +26,7 @@ def app_files():
         # Si esta en desarrollo
         try:
             files["PASSWORD_FILE"] = f"{file_path}\\password.json"
-            files["NOTES_FILE"] = f"{file_path}\\notas.db"
+            files["DATABASE"] = f"{file_path}\\notas.db"
             files["BACKUP_FILE"] = f"{file_path}\\Backup\\backup.json"
             files["LOG_FILE"] = f"{file_path}\\log.txt"
             files["ICON"] = "E:\\Proyectos\\NotEd\\assets\\bitmap.ico"
