@@ -1,6 +1,10 @@
 import tkinter as tk
 from customtkinter import CTkScrollbar
 
+from mediator.database_mediator import DatabaseMediator
+
+database_mediator = DatabaseMediator()
+
 
 class Editor(tk.Frame):
     def __init__(self, master):
@@ -93,10 +97,10 @@ class Editor(tk.Frame):
 
                 if self.current_note:
                     data = (self.current_note, current_title, current_content)
-                    self.app.database_manager.modify_note(data)
+                    database_mediator.call_event("modify_note", data)
                 else:
                     data = (current_title, current_content)
-                    self.app.database_manager.add_note(data)
+                    database_mediator.call_event("add_note", data)
         except Exception as e:
             print(f"Error en guardado final: {e}")
 

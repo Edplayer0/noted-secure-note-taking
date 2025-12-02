@@ -1,5 +1,9 @@
 import sqlite3
 
+from mediator.database_mediator import DatabaseMediator
+
+database_mediator = DatabaseMediator()
+
 
 class DatabaseManager:
 
@@ -8,6 +12,13 @@ class DatabaseManager:
         self.app = app
 
         self.database = self.app.files["NOTES_FILE"]
+
+        database_mediator.add_service(self)
+
+        database_mediator.add_event("load_notes", self.load_notes)
+        database_mediator.add_event("add_note", self.add_note)
+        database_mediator.add_event("modify_note", self.modify_note)
+        database_mediator.add_event("delete_note", self.delete_note)
 
     def load_notes(self):
 

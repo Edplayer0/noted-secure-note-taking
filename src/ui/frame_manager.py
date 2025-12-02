@@ -1,5 +1,8 @@
-from ui.notes_frame import NotesFrame
 from math import ceil
+from ui.notes_frame import NotesFrame
+from mediator.database_mediator import DatabaseMediator
+
+database_mediator = DatabaseMediator()
 
 
 class FrameManager:
@@ -21,7 +24,7 @@ class FrameManager:
 
         self.notes_frames.clear()
 
-        notes = self.app.database_manager.load_notes()
+        notes = database_mediator.call_event("load_notes")
 
         notes_count = 0
 
