@@ -1,17 +1,15 @@
-from ui.notes import Note
 from customtkinter import CTkFrame, set_appearance_mode
+from ui.notes import Note
 
 set_appearance_mode("light")
 
 
 class NotesFrame(CTkFrame):
 
-    def __init__(self, master, app, notes):
+    def __init__(self, master, notes):
         super().__init__(master)
 
         self.frame = master
-
-        self.app = app
 
         self.notes = notes
 
@@ -32,7 +30,7 @@ class NotesFrame(CTkFrame):
         notes_count = 0
 
         for note_data in self.notes:
-            note = Note(self, note_data, self.app, notes_count)
+            note = Note(self, note_data, notes_count)
             note.show()
 
             notes_count += 1

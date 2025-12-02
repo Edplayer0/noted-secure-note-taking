@@ -1,4 +1,7 @@
 from tkinter import Tk
+from mediator.app_mediator import AppMediator
+
+app_mediator = AppMediator()
 
 
 class App(Tk):
@@ -25,6 +28,4 @@ class App(Tk):
 
     def start(self) -> None:
 
-        self.login.exit()
-
-        self.dashboard.show()
+        app_mediator.call_event("open_dashboard")

@@ -1,21 +1,23 @@
 from math import ceil
 from ui.notes_frame import NotesFrame
-from mediator.database_mediator import DatabaseMediator
+from mediator.app_mediator import AppMediator
 
-database_mediator = DatabaseMediator()
+
+app_mediator = AppMediator()
 
 
 class FrameManager:
 
-    def __init__(self, app, dashboard_frame):
-
-        self.app = app
+    def __init__(self, dashboard_frame):
 
         self.current_frame = False
 
         self.notes_frames = []
 
         self.dashboard_frame = dashboard_frame
+
+        app_mediator.add_handler("prev_frame", self.prev_frame)
+        app_mediator.add_handler("next_frame", self.next_frame)
 
     def load_frames(self):
 
@@ -24,14 +26,14 @@ class FrameManager:
 
         self.notes_frames.clear()
 
-        notes = database_mediator.call_event("load_notes")
+        notes = app_mediator.call_event("load_notes")
 
         notes_count = 0
 
         for _ in range(ceil(len(notes) / 4)):
 
             frame = NotesFrame(
-                self.dashboard_frame, self.app, notes[notes_count : notes_count + 4]
+                self.dashboard_frame, notes[notes_count : notes_count + 4]
             )
 
             self.notes_frames.append(frame)

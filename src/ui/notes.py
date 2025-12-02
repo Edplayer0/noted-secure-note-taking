@@ -1,9 +1,14 @@
 import customtkinter as ctk
+from mediator.app_mediator import AppMediator
+
+app_mediator = AppMediator()
 
 
 class Note(ctk.CTkFrame):
-    def __init__(self, master, data, app, notes_count):
+    def __init__(self, master, data, notes_count):
         super().__init__(master)
+
+        self.data = data
 
         self.count = notes_count
 
@@ -29,7 +34,7 @@ class Note(ctk.CTkFrame):
             width=20,
             fg_color="#FFEE8C",
             font=ctk.CTkFont(family="Segoe UI Symbol", size=20),
-            command=lambda data=data: app.dashboard.editor.enter(data=data),
+            command=lambda: app_mediator.call_event("open_editor", self.data),
             hover_color="gray",
             cursor="hand2",
             text_color="white",

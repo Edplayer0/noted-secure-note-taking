@@ -1,14 +1,14 @@
-"""Database communications mediator"""
+"""App communications mediator"""
 
 from typing import Any, List, Dict, Callable, TypeVar
+from inspect import signature
 from mediator.mediator import Mediator
 
 T = TypeVar("T")
-HandlerResult = List[T] | T
 
 
-class DatabaseMediator(Mediator):
-    """Database mediator"""
+class AppMediator(Mediator):
+    """App communications mediator"""
 
     _instance = None
     _initialized = False
@@ -35,20 +35,29 @@ class DatabaseMediator(Mediator):
             self.handlers[event] = []
         self.handlers[event].append(handler)
 
-    def call_event(self, event: str, data: T | None = None) -> HandlerResult:
+    def call_event(self, event: str, data: T | None = None) -> List[T] | T:
 
         response = []
 
         if event in self.handlers:
             for handler in self.handlers[event]:
-                if data:
-                    result = handler(data)
-                    if result:
-                        response.append(result)
-                else:
+
+                sig = signature(handler)
+                num_args = len(sig.parameters)
+
+                try:
+                    if num_args == 0:  # No toma args
+                        result = handler()
+                    elif data is not None:  # Toma args y hay data
+                        result = handler(data)
+                    else:  # Toma args pero no hay data
+                        result = handler()
+                except TypeError:
+                    # Fallback: intenta sin args si falla con data
                     result = handler()
-                    if result:
-                        response.append(result)
+
+                if result:
+                    response.append(result)
 
         if len(response) == 1:
             response = response[0]

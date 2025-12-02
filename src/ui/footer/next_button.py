@@ -1,9 +1,12 @@
 from customtkinter import CTkButton, CTkFont
+from mediator.app_mediator import AppMediator
+
+app_mediator = AppMediator()
 
 
 class NextButton(CTkButton):
 
-    def __init__(self, master, app):
+    def __init__(self, master):
         super().__init__(master)
 
         self.configure(
@@ -15,5 +18,5 @@ class NextButton(CTkButton):
             text_color="white",
             cursor="hand2",
             corner_radius=20,
-            command=lambda: app.dashboard.frames_manager.next_frame(),
+            command=lambda: app_mediator.call_event("next_frame"),
         )

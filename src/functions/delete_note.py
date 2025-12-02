@@ -1,8 +1,8 @@
 from tkinter import messagebox
 
-from mediator.database_mediator import DatabaseMediator
+from mediator.app_mediator import AppMediator
 
-database_mediator = DatabaseMediator()
+app_mediator = AppMediator()
 
 
 def delete_note(app):
@@ -16,8 +16,8 @@ def delete_note(app):
         current_note = app.dashboard.editor.current_note
 
         if current_note:
-            database_mediator.call_event("delete_note", current_note)
-            app.dashboard.editor.exit(no_save=True)
+            app_mediator.call_event("delete_note", current_note)
+            app_mediator.call_event("close_editor", True)
 
         else:
-            app.dashboard.editor.exit(no_save=True)
+            app_mediator.call_event("close_editor", True)

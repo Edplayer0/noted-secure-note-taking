@@ -1,26 +1,26 @@
 import sqlite3
 
-from mediator.database_mediator import DatabaseMediator
+from mediator.app_mediator import AppMediator
 
-database_mediator = DatabaseMediator()
+app_mediator = AppMediator()
 
 
 class DatabaseManager:
 
-    def __init__(self, database):
+    def __init__(self, app):
 
-        self.database = database
+        self.app = app
 
-        database_mediator.add_service(self)
+        app_mediator.add_service(self)
 
-        database_mediator.add_handler("load_notes", self.load_notes)
-        database_mediator.add_handler("add_note", self.add_note)
-        database_mediator.add_handler("modify_note", self.modify_note)
-        database_mediator.add_handler("delete_note", self.delete_note)
+        app_mediator.add_handler("load_notes", self.load_notes)
+        app_mediator.add_handler("add_note", self.add_note)
+        app_mediator.add_handler("modify_note", self.modify_note)
+        app_mediator.add_handler("delete_note", self.delete_note)
 
     def load_notes(self):
 
-        with sqlite3.connect(self.database) as conn:
+        with sqlite3.connect(self.app) as conn:
 
             cursor = conn.cursor()
 
@@ -32,8 +32,8 @@ class DatabaseManager:
 
         for note in notes:
             note_id = note[0]
-            title = database_mediator.call_event("decode", note[1])
-            content = database_mediator.call_event("decode", note[2])
+            title = app_mediator.call_event("decode", note[1])
+            content = app_mediator.call_event("decode", note[2])
 
             notes_list.append((note_id, title, content))
 
@@ -41,10 +41,10 @@ class DatabaseManager:
 
     def add_note(self, data: tuple[str]):
 
-        title = database_mediator.call_event("encode", data[0])
-        content = database_mediator.call_event("encode", data[1])
+        title = app_mediator.call_event("encode", data[0])
+        content = app_mediator.call_event("encode", data[1])
 
-        with sqlite3.connect(self.database) as conn:
+        with sqlite3.connect(self.app) as conn:
 
             cursor = conn.cursor()
 
@@ -56,10 +56,10 @@ class DatabaseManager:
     def modify_note(self, data: tuple[int | str]):
 
         note_id = data[0]
-        title = database_mediator.call_event("encode", data[1])
-        content = database_mediator.call_event("encode", data[2])
+        title = app_mediator.call_event("encode", data[1])
+        content = app_mediator.call_event("encode", data[2])
 
-        with sqlite3.connect(self.database) as conn:
+        with sqlite3.connect(self.app) as conn:
 
             cursor = conn.cursor()
 
@@ -74,7 +74,7 @@ class DatabaseManager:
 
     def delete_note(self, note_id: int):
 
-        with sqlite3.connect(self.database) as conn:
+        with sqlite3.connect(self.app) as conn:
 
             cursor = conn.cursor()
 

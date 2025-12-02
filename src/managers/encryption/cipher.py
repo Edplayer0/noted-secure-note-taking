@@ -1,8 +1,8 @@
 import base64
 
-from mediator.database_mediator import DatabaseMediator
+from mediator.app_mediator import AppMediator
 
-database_mediator = DatabaseMediator()
+app_mediator = AppMediator()
 
 
 class Cipher:
@@ -11,9 +11,9 @@ class Cipher:
 
         self.cipher = cipher
 
-        database_mediator.add_service(self)
-        database_mediator.add_handler("encode", self.encode)
-        database_mediator.add_handler("decode", self.decode)
+        app_mediator.add_service(self)
+        app_mediator.add_handler("encode", self.encode)
+        app_mediator.add_handler("decode", self.decode)
 
     def encode(self, info: str):
 

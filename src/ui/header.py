@@ -1,5 +1,8 @@
 import tkinter as tk
 from functions.delete_note import delete_note
+from mediator.app_mediator import AppMediator
+
+app_mediator = AppMediator()
 
 
 class Header(tk.Frame):
@@ -44,7 +47,7 @@ class Header(tk.Frame):
             padx=10,
             font="Arial 23",
             cursor="hand2",
-            command=lambda: self.app.dashboard.editor.exit(),
+            command=lambda: app_mediator.call_event("close_editor"),
         )
         self.delete_button = tk.Button(
             self,
@@ -58,6 +61,10 @@ class Header(tk.Frame):
             cursor="hand2",
             command=lambda: delete_note(master),
         )
+
+        app_mediator.add_handler("close_editor", self.alter_mode)
+        app_mediator.add_handler("open_editor", self.alter_mode)
+        app_mediator.add_handler("open_dashboard", self.show)
 
     def show(self):
 

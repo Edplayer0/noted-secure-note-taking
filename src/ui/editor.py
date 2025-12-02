@@ -1,9 +1,9 @@
 import tkinter as tk
 from customtkinter import CTkScrollbar
 
-from mediator.database_mediator import DatabaseMediator
+from mediator.app_mediator import AppMediator
 
-database_mediator = DatabaseMediator()
+app_mediator = AppMediator()
 
 
 class Editor(tk.Frame):
@@ -47,10 +47,11 @@ class Editor(tk.Frame):
         self.scroll.grid(column=1, row=0, sticky="ns")
         self.editor_text.configure(yscrollcommand=self.scroll.set)
 
+        app_mediator.add_handler("close_editor", self.exit)
+        app_mediator.add_handler("open_editor", self.enter)
+
     def enter(self, data=False):
         """Mostrar el editor y preparar para edición"""
-        self.app.dashboard.exit()
-        self.app.dashboard.header.alter_mode()
 
         def on_entry_focus_in(event):
             if self.editor_entry.get() == "Título de la nota...":
@@ -97,10 +98,10 @@ class Editor(tk.Frame):
 
                 if self.current_note:
                     data = (self.current_note, current_title, current_content)
-                    database_mediator.call_event("modify_note", data)
+                    app_mediator.call_event("modify_note", data)
                 else:
                     data = (current_title, current_content)
-                    database_mediator.call_event("add_note", data)
+                    app_mediator.call_event("add_note", data)
         except Exception as e:
             print(f"Error en guardado final: {e}")
 
@@ -115,6 +116,3 @@ class Editor(tk.Frame):
         self.pack_forget()
         self.editor_entry.delete(0, tk.END)
         self.editor_text.delete("1.0", tk.END)
-
-        self.app.dashboard.header.alter_mode()
-        self.app.dashboard.show()

@@ -1,6 +1,10 @@
 import tkinter as tk
 import customtkinter as ctk
 
+from mediator.app_mediator import AppMediator
+
+app_mediator = AppMediator()
+
 
 class Login(tk.Frame):
     def __init__(self, master):
@@ -59,6 +63,8 @@ class Login(tk.Frame):
             font=ctk.CTkFont(family="Arial", size=11),
         )
         self.copylabel.pack(side="bottom")
+
+        app_mediator.add_handler("open_dashboard", self.exit)
 
     def enter(self):
         self.pack(fill="both", expand=True)
