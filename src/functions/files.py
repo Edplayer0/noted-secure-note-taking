@@ -2,8 +2,12 @@ import sys
 from os.path import dirname, abspath
 from tkinter import messagebox
 
+from mediator.mediator import Mediator
 
-def app_files():
+
+def app_files(app_mediator: Mediator) -> None:
+    """Adds a event called 'files' to the mediator
+    which returns a dict with the paths"""
 
     # ARCHIVOS DE LA APLICACION
     file_path = f"{dirname(abspath(__file__))}\\.."
@@ -33,4 +37,4 @@ def app_files():
         except Exception as e:
             messagebox.showerror("Error", e)
 
-    return files
+    app_mediator.add_handler("files", lambda: files)

@@ -1,13 +1,14 @@
 import tkinter as tk
-from functions.delete_note import delete_note
-from mediator.app_mediator import AppMediator
 
-app_mediator = AppMediator()
+from functions.delete_note import delete_note
+from mediator.mediator import Mediator
 
 
 class Header(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, app_mediator: Mediator):
         super().__init__(master)
+
+        self.mediator = app_mediator
 
         self.app = master
 
@@ -59,12 +60,12 @@ class Header(tk.Frame):
             padx=10,
             font=("Segoe UI Symbol", 23),
             cursor="hand2",
-            command=lambda: delete_note(master),
+            command=lambda: delete_note(master, app_mediator),
         )
 
-        app_mediator.add_handler("close_editor", self.alter_mode)
-        app_mediator.add_handler("open_editor", self.alter_mode)
-        app_mediator.add_handler("open_dashboard", self.show)
+        self.mediator.add_handler("close_editor", self.alter_mode)
+        self.mediator.add_handler("open_editor", self.alter_mode)
+        self.mediator.add_handler("start", self.show)
 
     def show(self):
 

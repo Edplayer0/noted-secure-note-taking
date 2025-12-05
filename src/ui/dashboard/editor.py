@@ -3,16 +3,17 @@ import tkinter as tk
 from datetime import datetime
 from customtkinter import CTkScrollbar
 
-from mediator.app_mediator import AppMediator
-
-app_mediator = AppMediator()
+from mediator.mediator import Mediator
 
 
 class Editor(tk.Frame):
     """Editor de las notas"""
 
-    def __init__(self, master):
+    def __init__(self, master, app_mediator: Mediator):
         super().__init__(master)
+
+        self.mediator = app_mediator
+
         self.app = master
         self.config(bg="white")
 
@@ -51,8 +52,9 @@ class Editor(tk.Frame):
         self.scroll.grid(column=1, row=0, sticky="ns")
         self.editor_text.configure(yscrollcommand=self.scroll.set)
 
-        app_mediator.add_handler("close_editor", self.exit)
-        app_mediator.add_handler("open_editor", self.enter)
+        self.mediator.add_handler("close_editor", self.exit)
+        self.mediator.add_handler("open_editor", self.enter)
+        self.mediator.add_handler("current_note", lambda: self.current_note)
 
     def enter(self, data: tuple | bool = False) -> None:
         """Mostrar el editor y preparar para edición"""
@@ -80,7 +82,7 @@ class Editor(tk.Frame):
             title: str = data[1]
             date: str = data[2]
 
-            content = app_mediator.call_event("load_note_content", self.current_note)
+            content = self.mediator.call_event("load_note_content", self.current_note)
 
             self.editor_entry.config(fg="black")
             self.editor_entry.insert(0, title)
@@ -97,10 +99,10 @@ class Editor(tk.Frame):
             # El titulo actual
             current_title: str = self.editor_entry.get().strip()
 
-            # Todo el contenido del campo de texto
+            # El contenido de todo el campo de texto
             text_content: str = self.editor_text.get("1.0", "end-1c").strip()
 
-            if not text_content:
+            if not text_content or not current_title:
                 return
 
             # Si la longitud es menor a 10 se asume que no hay fecha
@@ -132,10 +134,10 @@ class Editor(tk.Frame):
                         current_date,
                         current_content,
                     )
-                    app_mediator.call_event("modify_note", data)
+                    self.mediator.call_event("modify_note", data)
                 else:
                     data = (current_title, current_date, current_content)
-                    app_mediator.call_event("add_note", data)
+                    self.mediator.call_event("add_note", data)
         except Exception as e:
             print(f"Error en guardado final: {e}")
 

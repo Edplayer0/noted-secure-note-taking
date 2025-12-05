@@ -1,11 +1,7 @@
 from tkinter import messagebox
 
-from mediator.app_mediator import AppMediator
 
-app_mediator = AppMediator()
-
-
-def delete_note(app):
+def delete_note(app, app_mediator):
 
     confirmacion = messagebox.askyesno(
         "Confirmacion", "¿Realmente deseas eliminar esta nota?"
@@ -13,7 +9,7 @@ def delete_note(app):
 
     if confirmacion:
 
-        current_note = app.dashboard.editor.current_note
+        current_note = app_mediator.call_event("current_note")
 
         if current_note:
             app_mediator.call_event("delete_note", current_note)

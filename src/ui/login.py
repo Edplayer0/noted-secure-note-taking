@@ -1,14 +1,14 @@
 import tkinter as tk
 import customtkinter as ctk
 
-from mediator.app_mediator import AppMediator
-
-app_mediator = AppMediator()
+from mediator.mediator import Mediator
 
 
 class Login(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, app_mediator: Mediator):
         super().__init__(master)
+
+        self.mediator = app_mediator
 
         self.header = tk.Label(
             self,
@@ -44,8 +44,8 @@ class Login(tk.Frame):
         self.boton_login = ctk.CTkButton(
             self.login_box,
             text="",
-            command=lambda: master.password_manager.verify(
-                bytearray(self.entrada_contrasena.get().encode())
+            command=lambda: self.mediator.call_event(
+                "verify_password", bytearray(self.entrada_contrasena.get().encode())
             ),
             state="disabled",
             fg_color="#FFEE8C",
@@ -64,7 +64,11 @@ class Login(tk.Frame):
         )
         self.copylabel.pack(side="bottom")
 
-        app_mediator.add_handler("open_dashboard", self.exit)
+        self.mediator.add_handler("start", self.exit)
+        self.mediator.add_handler("show_login", self.enter)
+        self.mediator.add_handler(
+            "enable_login_button", lambda: self.boton_login.configure(state="normal")
+        )
 
     def enter(self):
         self.pack(fill="both", expand=True)

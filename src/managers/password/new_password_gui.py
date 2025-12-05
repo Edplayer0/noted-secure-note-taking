@@ -1,20 +1,23 @@
+from tkinter import messagebox
 import customtkinter as ctk
 
-from tkinter import messagebox
+from mediator.mediator import Mediator
 
 
 class NewPassword(ctk.CTkToplevel):
 
-    def __init__(self, app):
+    def __init__(self, app_mediator: Mediator):
         super().__init__()
 
-        self.app = app
+        self.mediator = app_mediator
 
         self.title("Crear contraseña")
 
         self.geometry("300x200")
 
-        self.after(250, lambda: self.iconbitmap(app.files["ICON"]))
+        icon = app_mediator.call_event("files")["ICON"]
+
+        self.after(250, lambda: self.iconbitmap(icon))
 
         self.instruct = ctk.CTkLabel(
             self,
@@ -53,6 +56,6 @@ class NewPassword(ctk.CTkToplevel):
 
             return
 
-        self.app.password_manager.generate(self.entry1.get().strip())
+        self.mediator.call_event("generate", self.entry1.get().strip())
 
         self.destroy()

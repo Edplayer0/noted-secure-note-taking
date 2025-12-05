@@ -1,21 +1,31 @@
 import base64
 
-from mediator.app_mediator import AppMediator
+from cryptography.fernet import Fernet
 
-app_mediator = AppMediator()
+from mediator.mediator import Mediator
 
 
 class Cipher:
 
-    def __init__(self, cipher):
+    def __init__(self, app_mediator: Mediator):
 
-        self.cipher = cipher
+        self.mediator = app_mediator
 
-        app_mediator.add_service(self)
-        app_mediator.add_handler("encode", self.encode)
-        app_mediator.add_handler("decode", self.decode)
+        self._cipher: Fernet | None = None
+
+        self.mediator.add_handler("configure_cipher", self.configure_cipher)
+        self.mediator.add_handler("encode", self.encode)
+        self.mediator.add_handler("decode", self.decode)
+
+    @property
+    def cipher(self) -> Fernet:
+        return self._cipher
+
+    def configure_cipher(self, cipher: Fernet) -> None:
+        self._cipher = cipher
 
     def encode(self, info: str):
+        """Encode the data"""
 
         encoded_info = base64.urlsafe_b64encode(
             self.cipher.encrypt(info.encode())
@@ -24,6 +34,7 @@ class Cipher:
         return encoded_info
 
     def decode(self, info: str):
+        """Decode the data"""
 
         decoded_info = self.cipher.decrypt(base64.urlsafe_b64decode(info)).decode()
 

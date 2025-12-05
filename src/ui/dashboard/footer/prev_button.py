@@ -1,13 +1,14 @@
 from customtkinter import CTkButton, CTkFont
-from mediator.app_mediator import AppMediator
 
-app_mediator = AppMediator()
+from mediator.mediator import Mediator
 
 
 class PrevButton(CTkButton):
 
-    def __init__(self, master):
+    def __init__(self, master, app_mediator: Mediator):
         super().__init__(master)
+
+        self.mediator = app_mediator
 
         self.configure(
             fg_color="transparent",

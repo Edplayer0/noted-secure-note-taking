@@ -1,24 +1,21 @@
 import sqlite3
 
-from mediator.app_mediator import AppMediator
-
-
-app_mediator = AppMediator()
+from mediator.mediator import Mediator
 
 
 class DatabaseManager:
 
-    def __init__(self, database: str):
+    def __init__(self, app_mediator: Mediator):
 
-        self.database = database
+        self.database = app_mediator.call_event("files")["DATABASE"]
 
-        app_mediator.add_service(self)
+        self.mediator = app_mediator
 
-        app_mediator.add_handler("load_notes", self.load_notes)
-        app_mediator.add_handler("load_note_content", self.load_note_content)
-        app_mediator.add_handler("add_note", self.add_note)
-        app_mediator.add_handler("modify_note", self.modify_note)
-        app_mediator.add_handler("delete_note", self.delete_note)
+        self.mediator.add_handler("load_notes", self.load_notes)
+        self.mediator.add_handler("load_note_content", self.load_note_content)
+        self.mediator.add_handler("add_note", self.add_note)
+        self.mediator.add_handler("modify_note", self.modify_note)
+        self.mediator.add_handler("delete_note", self.delete_note)
 
     def load_notes(self) -> list[tuple[int, str]]:
         """Load the list of notes from the database"""
@@ -37,7 +34,7 @@ class DatabaseManager:
 
         for note in notes:
             note_id = note[0]
-            title = app_mediator.call_event("decode", note[1])
+            title = self.mediator.call_event("decode", note[1])
             date = note[2]
 
             notes_list.append((note_id, title, date))
@@ -55,15 +52,15 @@ class DatabaseManager:
             )
 
             encoded_content = cursor.fetchone()[0]
-            decoded_content = app_mediator.call_event("decode", encoded_content)
+            decoded_content = self.mediator.call_event("decode", encoded_content)
 
             return decoded_content
 
     def add_note(self, data: tuple[str]):
 
-        title = app_mediator.call_event("encode", data[0])
+        title = self.mediator.call_event("encode", data[0])
         date = data[1]
-        content = app_mediator.call_event("encode", data[2])
+        content = self.mediator.call_event("encode", data[2])
 
         with sqlite3.connect(self.database) as conn:
 
@@ -77,9 +74,9 @@ class DatabaseManager:
     def modify_note(self, data: tuple[int | str]):
 
         note_id = data[0]
-        title = app_mediator.call_event("encode", data[1])
+        title = self.mediator.call_event("encode", data[1])
         date = data[2]
-        content = app_mediator.call_event("encode", data[3])
+        content = self.mediator.call_event("encode", data[3])
 
         with sqlite3.connect(self.database) as conn:
 

@@ -2,19 +2,19 @@ from tkinter import Frame
 
 from customtkinter import CTkFrame
 
-from ui.footer.new_button import NewButton
-from ui.footer.prev_button import PrevButton
-from ui.footer.next_button import NextButton
+from ui.dashboard.footer.new_button import NewButton
+from ui.dashboard.footer.prev_button import PrevButton
+from ui.dashboard.footer.next_button import NextButton
 
-from mediator.app_mediator import AppMediator
-
-app_mediator = AppMediator()
+from mediator.mediator import Mediator
 
 
 class Footer(Frame):
 
-    def __init__(self, master):
+    def __init__(self, master, app_mediator: Mediator):
         super().__init__(master)
+
+        self.mediator = app_mediator
 
         self.columnconfigure(0, weight=1, uniform="group1")
         self.columnconfigure(1, weight=1, uniform="group1")
@@ -33,18 +33,18 @@ class Footer(Frame):
 
         self.inner_frame.grid(column=1, row=1, sticky="ew", columnspan=3, padx=10)
 
-        self.new_button = NewButton(self.inner_frame)
+        self.new_button = NewButton(self.inner_frame, app_mediator)
         self.new_button.grid(column=1, row=0, sticky="nsew", pady=10, padx=10)
 
-        self.prev_button = PrevButton(self.inner_frame)
+        self.prev_button = PrevButton(self.inner_frame, app_mediator)
         self.prev_button.grid(column=0, row=0, sticky="nsew", pady=10, padx=10)
 
-        self.next_button = NextButton(self.inner_frame)
+        self.next_button = NextButton(self.inner_frame, app_mediator)
         self.next_button.grid(column=2, row=0, sticky="nsew", pady=10, padx=10)
 
-        app_mediator.add_handler("open_editor", self.hide)
-        app_mediator.add_handler("close_editor", self.show)
-        app_mediator.add_handler("open_dashboard", self.show)
+        self.mediator.add_handler("open_editor", self.hide)
+        self.mediator.add_handler("close_editor", self.show)
+        self.mediator.add_handler("start", self.show)
 
     def show(self):
 

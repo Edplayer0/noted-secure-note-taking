@@ -1,13 +1,16 @@
 from customtkinter import CTkFrame, set_appearance_mode
-from ui.notes import Note
+from ui.dashboard.notes.notes import Note
+from mediator.mediator import Mediator
 
 set_appearance_mode("light")
 
 
 class NotesFrame(CTkFrame):
 
-    def __init__(self, master, notes):
+    def __init__(self, master, notes, app_mediator: Mediator):
         super().__init__(master)
+
+        self.mediator = app_mediator
 
         self.frame = master
 
@@ -30,7 +33,7 @@ class NotesFrame(CTkFrame):
         notes_count = 0
 
         for note_data in self.notes:
-            note = Note(self, note_data, notes_count)
+            note = Note(self, note_data, notes_count, self.mediator)
             note.show()
 
             notes_count += 1

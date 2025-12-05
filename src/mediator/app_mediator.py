@@ -1,7 +1,6 @@
 """App communications mediator"""
 
-from typing import Any, List, Dict, Callable, TypeVar
-from inspect import signature
+from typing import List, Dict, Callable, TypeVar
 from mediator.mediator import Mediator
 
 T = TypeVar("T")
@@ -10,25 +9,9 @@ T = TypeVar("T")
 class AppMediator(Mediator):
     """App communications mediator"""
 
-    _instance = None
-    _initialized = False
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-
-        return cls._instance
-
     def __init__(self):
-        if not self._initialized:
-            self.services: List[Any] = []
-            self.handlers: Dict[str, List[Callable]] = {}
 
-            self._initialized = True
-
-    def add_service(self, service: Any) -> None:
-        self.services.append(service)
-        service.mediator = self
+        self.handlers: Dict[str, List[Callable]] = {}
 
     def add_handler(self, event: str, handler: Callable) -> None:
         if not event in self.handlers:

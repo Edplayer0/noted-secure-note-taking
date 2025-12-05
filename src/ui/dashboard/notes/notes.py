@@ -1,11 +1,9 @@
 import customtkinter as ctk
-from mediator.app_mediator import AppMediator
-
-app_mediator = AppMediator()
+from mediator.mediator import Mediator
 
 
 class Note(ctk.CTkFrame):
-    def __init__(self, master, data: tuple, notes_count: int):
+    def __init__(self, master, data: tuple, notes_count: int, app_mediator: Mediator):
         super().__init__(master)
 
         self.data: tuple = data

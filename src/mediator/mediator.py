@@ -8,10 +8,6 @@ class Mediator(ABC):
     """Mediator abstaction"""
 
     @abstractmethod
-    def add_service(self, service: Any) -> None:
-        """Appends a service"""
-
-    @abstractmethod
     def add_handler(self, event: str, handler: Callable) -> None:
         """Appends a event"""
 

@@ -9,18 +9,20 @@ from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives import constant_time
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from managers.encryption.cipher import Cipher
 from managers.password.new_password_gui import NewPassword
 from managers.password.key_manager import KeyManager
 
 
+from mediator.mediator import Mediator
+
+
 class PasswordManager:
 
-    def __init__(self, app):
+    def __init__(self, app_mediator: Mediator):
 
-        self.app = app
+        self.mediator = app_mediator
 
-        self.password_file = self.app.files["PASSWORD_FILE"]
+        self.password_file = self.mediator.call_event("files")["PASSWORD_FILE"]
 
         self.key_manager = KeyManager(self.password_file)
 
@@ -30,11 +32,14 @@ class PasswordManager:
 
             self.truepass, self.salt1, self.salt2 = self.password_data
 
-            self.app.login.boton_login.configure(state="normal")
+            self.mediator.call_event("enable_login_button")
 
         else:
 
             self.new_password()
+
+        self.mediator.add_handler("verify_password", self.verify)
+        self.mediator.add_handler("generate", self.generate)
 
     def verify(self, user_pass):
 
@@ -57,19 +62,23 @@ class PasswordManager:
 
         if constant_time.bytes_eq(posible_pass, self.truepass):
             del posible_pass
+
             cipher = Fernet(base64.urlsafe_b64encode(notas_pass))
+
+            self.mediator.call_event("configure_cipher", cipher)
+
             del notas_pass
-            self.app.cipher = Cipher(cipher)
+
             gc.collect()
 
-            self.app.start()
+            self.mediator.call_event("start")
 
         else:
             messagebox.showerror("Error", "Contraseña incorrecta")
 
     def new_password(self):
 
-        new_pass = NewPassword(self.app)
+        NewPassword(self.mediator)
 
     def generate(self, password):
 
@@ -88,4 +97,4 @@ class PasswordManager:
 
         self.key_manager.save_keys(new_pass, salt1, salt2)
 
-        self.app.login.boton_login.configure(state="normal")
+        self.mediator.call_event("enable_login_button")
