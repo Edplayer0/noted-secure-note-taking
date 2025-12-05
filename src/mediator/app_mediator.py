@@ -42,19 +42,28 @@ class AppMediator(Mediator):
         if event in self.handlers:
             for handler in self.handlers[event]:
 
-                sig = signature(handler)
-                num_args = len(sig.parameters)
+                # sig = signature(handler)
+                # num_args = len(sig.parameters)
 
-                try:
-                    if num_args == 0:  # No toma args
-                        result = handler()
-                    elif data is not None:  # Toma args y hay data
-                        result = handler(data)
-                    else:  # Toma args pero no hay data
-                        result = handler()
-                except TypeError:
-                    # Fallback: intenta sin args si falla con data
+                # try:
+                #     if num_args == 0:  # No toma args
+                #         result = handler()
+                #     elif data is not None:  # Toma args y hay data
+                #         result = handler(data)
+                #     else:  # Toma args pero no hay data
+                #         result = handler()
+                # except TypeError:
+                #     # Fallback: intenta sin args si falla con data
+                #     result = handler()
+
+                if data is None:
                     result = handler()
+
+                else:
+                    try:
+                        result = handler(data)
+                    except TypeError:
+                        result = handler()
 
                 if result:
                     response.append(result)

@@ -5,16 +5,17 @@ app_mediator = AppMediator()
 
 
 class Note(ctk.CTkFrame):
-    def __init__(self, master, data, notes_count):
+    def __init__(self, master, data: tuple, notes_count: int):
         super().__init__(master)
 
-        self.data = data
+        self.data: tuple = data
+
+        self.title: str = data[1]
+        self.date: str = data[2]
 
         self.count = notes_count
 
         self.configure(fg_color="#dcdcdc")
-
-        self.id, self.title, self.content = data
 
         self.title_label = ctk.CTkLabel(
             self, text=self.title, font=ctk.CTkFont(family="Segoe Script", size=22)
@@ -23,7 +24,7 @@ class Note(ctk.CTkFrame):
 
         self.date_label = ctk.CTkLabel(
             self,
-            text=self.content[:10],
+            text=self.date,
             font=ctk.CTkFont(family="Arial", size=17),
         )
         self.date_label.pack()

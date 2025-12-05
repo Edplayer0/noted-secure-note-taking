@@ -1,4 +1,6 @@
+import re
 import tkinter as tk
+from datetime import datetime
 from customtkinter import CTkScrollbar
 
 from mediator.app_mediator import AppMediator
@@ -7,6 +9,8 @@ app_mediator = AppMediator()
 
 
 class Editor(tk.Frame):
+    """Editor de las notas"""
+
     def __init__(self, master):
         super().__init__(master)
         self.app = master
@@ -50,7 +54,7 @@ class Editor(tk.Frame):
         app_mediator.add_handler("close_editor", self.exit)
         app_mediator.add_handler("open_editor", self.enter)
 
-    def enter(self, data=False):
+    def enter(self, data: tuple | bool = False) -> None:
         """Mostrar el editor y preparar para edición"""
 
         def on_entry_focus_in(event):
@@ -72,35 +76,65 @@ class Editor(tk.Frame):
             self.editor_entry.bind("<FocusIn>", on_entry_focus_in)
         else:
             # Editar nota existente
-            self.current_note = data[0]
-            title = data[1]
-            content = data[2]
+            self.current_note: int = data[0]
+            title: str = data[1]
+            date: str = data[2]
+
+            content = app_mediator.call_event("load_note_content", self.current_note)
 
             self.editor_entry.config(fg="black")
             self.editor_entry.insert(0, title)
             self.editor_text.insert("1.0", content)
+            self.editor_text.insert("1.0", date)
 
             self.update_idletasks()
 
         self.editor_text.focus_set()
 
-    def save(self):
+    def save(self) -> None:
         """Guardar cambios"""
         try:
-            current_title = self.editor_entry.get().strip()
-            current_content = self.editor_text.get("1.0", "end-1c").strip()
+            # El titulo actual
+            current_title: str = self.editor_entry.get().strip()
 
-            if (
-                current_title
-                and current_title != "Título de la nota..."
-                and current_content
-            ):
+            # Todo el contenido del campo de texto
+            text_content: str = self.editor_text.get("1.0", "end-1c").strip()
+
+            if not text_content:
+                return
+
+            # Si la longitud es menor a 10 se asume que no hay fecha
+            if len(text_content) < 10:
+                current_date: str = datetime.now().strftime("%d/%m/%Y")
+                current_content: str = "\n" + text_content
+
+            else:
+                possible_date: str = self.editor_text.get("1.0", "end-1c").strip()[:10]
+
+                # Si la fecha no cumple el patron se genera una
+                if not re.fullmatch(r"^\d\d/\d\d/\d\d\d\d$", possible_date):
+                    current_date = datetime.now().strftime("%d/%m/%Y")
+                    current_content: str = (
+                        "\n" + self.editor_text.get("1.0", "end-1c").rstrip()
+                    )
+                else:
+                    current_date: str = possible_date
+                    current_content: str = self.editor_text.get(
+                        "1.0", "end-1c"
+                    ).rstrip()[10:]
+
+            if current_title and current_title != "Título de la nota...":
 
                 if self.current_note:
-                    data = (self.current_note, current_title, current_content)
+                    data: tuple = (
+                        self.current_note,
+                        current_title,
+                        current_date,
+                        current_content,
+                    )
                     app_mediator.call_event("modify_note", data)
                 else:
-                    data = (current_title, current_content)
+                    data = (current_title, current_date, current_content)
                     app_mediator.call_event("add_note", data)
         except Exception as e:
             print(f"Error en guardado final: {e}")
