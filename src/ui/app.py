@@ -14,8 +14,3 @@ class App(Tk):
         icon = self.mediator.call_event("files")["ICON"]
 
         self.iconbitmap(icon)
-
-        self.mediator.add_handler("configure_cipher", self.configure_cipher)
-
-    def configure_cipher(self, cipher):
-        self.cipher = cipher
