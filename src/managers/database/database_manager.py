@@ -1,3 +1,5 @@
+"""Database manager module."""
+
 import sqlite3
 
 from collections import namedtuple
@@ -9,6 +11,18 @@ NoteData = namedtuple("NoteData", ("id", "title", "date"))
 
 
 class DatabaseManager:
+    """Manages the database operations related to notes. 
+    
+    Args:
+        app_mediator (Mediator): The application mediator for event handling.
+        
+    Methods:
+        load_notes() -> list[NoteData]: Load the list of notes from the database.
+        load_note_content(note_id: int) -> str: Load the content of a note from the database.
+        add_note(data: tuple[str, str, str]) -> None: Add a new note to the database.
+        modify_note(data: tuple[int, str, str, str]) -> None: Modify an existing note in the database.
+        delete_note(note_id: int) -> None: Delete a note from the database.
+    """
 
     def __init__(self, app_mediator: Mediator):
 
@@ -62,6 +76,7 @@ class DatabaseManager:
             return decoded_content
 
     def add_note(self, data: tuple[str, str, str]) -> None:
+        """Add a new note to the database"""
 
         title = self.mediator.call_event("encode", data[0])
         date = data[1]
@@ -77,7 +92,7 @@ class DatabaseManager:
             )
 
     def modify_note(self, data: tuple[int, str, str, str]) -> None:
-
+        """Modify an existing note in the database"""
         note_id = data[0]
         title = self.mediator.call_event("encode", data[1])
         date = data[2]
@@ -98,6 +113,7 @@ class DatabaseManager:
             )
 
     def delete_note(self, note_id: int) -> None:
+        """Delete a note from the database"""
 
         with sqlite3.connect(self.database) as conn:
 

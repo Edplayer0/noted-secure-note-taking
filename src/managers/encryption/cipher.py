@@ -1,3 +1,4 @@
+"""Cipher manager module."""
 import base64
 
 from cryptography.fernet import Fernet
@@ -6,6 +7,15 @@ from mediator.mediator import Mediator
 
 
 class Cipher:
+    """Cipher manager class.
+    Manage the encryption and decryption of data.
+    
+    Args:
+        app_mediator (Mediator): Application mediator.
+    Methods:
+        configure_cipher: Configure the cipher to use.
+        encode: Encode data.
+        decode: Decode data."""
 
     def __init__(self, app_mediator: Mediator):
 
@@ -19,9 +29,11 @@ class Cipher:
 
     @property
     def cipher(self) -> Fernet | None:
+        """Get the cipher."""
         return self._cipher
 
     def configure_cipher(self, cipher: Fernet) -> None:
+        """Configure the cipher to use"""
         self._cipher = cipher
 
     def encode(self, info: str):
