@@ -1,7 +1,11 @@
+"""Module defining the main application window for NotEd."""
+
 from tkinter import Tk
 
 
 class App(Tk):
+    """Main application window."""
+
     def __init__(self, app_mediator):
         super().__init__()
 

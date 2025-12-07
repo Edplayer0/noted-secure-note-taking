@@ -42,6 +42,8 @@ class Footer(Frame):
         self.next_button = NextButton(self.inner_frame, app_mediator)
         self.next_button.grid(column=2, row=0, sticky="nsew", pady=10, padx=10)
 
+        self.mediator.add_handler("show_menu", self.hide)
+        self.mediator.add_handler("exit_menu", self.show)
         self.mediator.add_handler("open_editor", self.hide)
         self.mediator.add_handler("close_editor", self.show)
         self.mediator.add_handler("start", self.show)

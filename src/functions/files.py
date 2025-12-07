@@ -21,7 +21,7 @@ def app_files(app_mediator: Mediator) -> None:
         try:
             files["PASSWORD_FILE"] = f"{file_path}\\password.json"
             files["DATABASE"] = f"{file_path}\\notas.db"
-            files["BACKUP_FILE"] = f"{file_path}\\Backup\\backup.json"
+            files["BACKUP_DATABASE"] = f"{file_path}\\notas-backup.db"
             files["LOG_FILE"] = f"{file_path}\\log.txt"
             files["ICON"] = f"{sys._MEIPASS}\\bitmap.ico"
         except Exception as e:
@@ -29,11 +29,11 @@ def app_files(app_mediator: Mediator) -> None:
     else:
         # Si esta en desarrollo
         try:
-            files["PASSWORD_FILE"] = f"{file_path}\\password.json"
-            files["DATABASE"] = f"{file_path}\\notas.db"
-            files["BACKUP_FILE"] = f"{file_path}\\Backup\\backup.json"
-            files["LOG_FILE"] = f"{file_path}\\log.txt"
-            files["ICON"] = "E:\\Proyectos\\NotEd\\assets\\bitmap.ico"
+            files["PASSWORD_FILE"] = f"{file_path}\\..\\files\\password.json"
+            files["DATABASE"] = f"{file_path}\\..\\files\\notas.db"
+            files["BACKUP_DATABASE"] = f"{file_path}\\..\\files\\notas-backup.db"
+            files["LOG_FILE"] = f"{file_path}\\..\\files\\log.txt"
+            files["ICON"] = f"{file_path}\\..\\assets\\bitmap.ico"
         except Exception as e:
             messagebox.showerror("Error", e)
 

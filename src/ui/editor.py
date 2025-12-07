@@ -17,7 +17,7 @@ class Editor(tk.Frame):
         self.app = master
         self.config(bg="white")
 
-        self.current_note = None
+        self.current_note: int | bool = False
 
         # Entry para el título
         self.editor_entry = tk.Entry(
@@ -56,7 +56,7 @@ class Editor(tk.Frame):
         self.mediator.add_handler("open_editor", self.enter)
         self.mediator.add_handler("current_note", lambda: self.current_note)
 
-    def enter(self, data: tuple | bool = False) -> None:
+    def enter(self, data: tuple[int, str, str] | bool = False) -> None:
         """Mostrar el editor y preparar para edición"""
 
         def on_entry_focus_in(event):
@@ -72,13 +72,13 @@ class Editor(tk.Frame):
 
         if not data:
             # Nueva nota
-            self.current_note = None
+            self.current_note = False
             self.editor_entry.config(fg="grey")
             self.editor_entry.insert(0, "Título de la nota...")
             self.editor_entry.bind("<FocusIn>", on_entry_focus_in)
         else:
             # Editar nota existente
-            self.current_note: int = data[0]
+            self.current_note = data[0]
             title: str = data[1]
             date: str = data[2]
 
@@ -86,8 +86,7 @@ class Editor(tk.Frame):
 
             self.editor_entry.config(fg="black")
             self.editor_entry.insert(0, title)
-            self.editor_text.insert("1.0", content)
-            self.editor_text.insert("1.0", date)
+            self.editor_text.insert("1.0", date + content)
 
             self.update_idletasks()
 
@@ -105,10 +104,13 @@ class Editor(tk.Frame):
             if not text_content or not current_title:
                 return
 
+            current_date: str
+            current_content: str
+
             # Si la longitud es menor a 10 se asume que no hay fecha
             if len(text_content) < 10:
-                current_date: str = datetime.now().strftime("%d/%m/%Y")
-                current_content: str = "\n" + text_content
+                current_date = datetime.now().strftime("%d/%m/%Y")
+                current_content = "\n" + text_content
 
             else:
                 possible_date: str = self.editor_text.get("1.0", "end-1c").strip()[:10]
@@ -116,14 +118,14 @@ class Editor(tk.Frame):
                 # Si la fecha no cumple el patron se genera una
                 if not re.fullmatch(r"^\d\d/\d\d/\d\d\d\d$", possible_date):
                     current_date = datetime.now().strftime("%d/%m/%Y")
-                    current_content: str = (
+                    current_content = (
                         "\n" + self.editor_text.get("1.0", "end-1c").rstrip()
                     )
                 else:
-                    current_date: str = possible_date
-                    current_content: str = self.editor_text.get(
-                        "1.0", "end-1c"
-                    ).rstrip()[10:]
+                    current_date = possible_date
+                    current_content = self.editor_text.get("1.0", "end-1c").rstrip()[
+                        10:
+                    ]
 
             if current_title and current_title != "Título de la nota...":
 

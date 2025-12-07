@@ -1,6 +1,10 @@
+"""Main module of the NotEd application."""
+
 from ui.app import App
 from ui.login import Login
 from ui.dashboard.dashboard import Dashboard
+from ui.menu.menu import Menu
+from ui.menu.functions import REGISTRY as MENU_FUNCTIONS
 from functions.files import app_files
 from managers.database.database_manager import DatabaseManager
 from managers.password.password_manager import PasswordManager
@@ -9,6 +13,7 @@ from mediator.app_mediator import AppMediator
 
 
 def main() -> None:
+    """Main function of the application."""
 
     # Services communications mediator
     app_mediator = AppMediator()
@@ -25,6 +30,11 @@ def main() -> None:
     # UI
     Login(app, app_mediator)
     Dashboard(app, app_mediator)
+    menu = Menu(app, app_mediator)
+
+    # Register menu functions
+    for name, func in MENU_FUNCTIONS.values():
+        menu.registry_function(name, func)
 
     # Manage the creation and verification of passwords
     PasswordManager(app_mediator)

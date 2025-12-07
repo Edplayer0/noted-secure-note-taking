@@ -18,7 +18,7 @@ class Cipher:
         self.mediator.add_handler("decode", self.decode)
 
     @property
-    def cipher(self) -> Fernet:
+    def cipher(self) -> Fernet | None:
         return self._cipher
 
     def configure_cipher(self, cipher: Fernet) -> None:

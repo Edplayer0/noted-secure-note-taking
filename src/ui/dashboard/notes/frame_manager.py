@@ -1,4 +1,6 @@
 from math import ceil
+from tkinter import Frame
+
 from ui.dashboard.notes.notes_frame import NotesFrame
 
 from mediator.mediator import Mediator
@@ -12,14 +14,15 @@ class FrameManager:
 
         self.current_frame = False
 
-        self.notes_frames = []
+        self.notes_frames: list[Frame] = []
 
         self.dashboard_frame = dashboard_frame
 
         self.mediator.add_handler("prev_frame", self.prev_frame)
         self.mediator.add_handler("next_frame", self.next_frame)
 
-    def load_frames(self):
+    def load_frames(self) -> None:
+        """Dinamically creates the frames"""
 
         for note_frame in self.notes_frames:
             note_frame.destroy()
@@ -42,7 +45,8 @@ class FrameManager:
 
             notes_count += 4
 
-    def show_frames(self):
+    def show_frames(self) -> None:
+        """Maps the current frame"""
 
         if self.notes_frames:
 
@@ -52,7 +56,8 @@ class FrameManager:
 
             self.notes_frames[self.current_frame].show()
 
-    def next_frame(self):
+    def next_frame(self) -> None:
+        """Show the next frame if exists"""
 
         try:
             self.notes_frames[self.current_frame + 1].show()
@@ -62,7 +67,8 @@ class FrameManager:
             self.notes_frames[self.current_frame].hide()
             self.current_frame += 1
 
-    def prev_frame(self):
+    def prev_frame(self) -> None:
+        """Show the previous frame if exists"""
 
         if self.current_frame != 0:
             try:

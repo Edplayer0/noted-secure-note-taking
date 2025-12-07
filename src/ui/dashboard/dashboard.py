@@ -1,6 +1,6 @@
 from tkinter import Frame
 
-from ui.dashboard.editor import Editor
+from ui.editor import Editor
 from ui.dashboard.header import Header
 from ui.dashboard.footer.footer import Footer
 from ui.dashboard.notes.frame_manager import FrameManager
@@ -25,6 +25,8 @@ class Dashboard:
         self.mediator.add_handler("start", self.show)
         self.mediator.add_handler("open_editor", self.exit)
         self.mediator.add_handler("close_editor", self.show)
+        self.mediator.add_handler("show_menu", self.exit)
+        self.mediator.add_handler("exit_menu", self.show)
 
     def show(self):
 

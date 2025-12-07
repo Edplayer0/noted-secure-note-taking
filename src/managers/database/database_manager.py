@@ -1,6 +1,11 @@
 import sqlite3
 
+from collections import namedtuple
+
 from mediator.mediator import Mediator
+
+
+NoteData = namedtuple("NoteData", ("id", "title", "date"))
 
 
 class DatabaseManager:
@@ -17,27 +22,27 @@ class DatabaseManager:
         self.mediator.add_handler("modify_note", self.modify_note)
         self.mediator.add_handler("delete_note", self.delete_note)
 
-    def load_notes(self) -> list[tuple[int, str]]:
+    def load_notes(self) -> list[NoteData]:
         """Load the list of notes from the database"""
 
         with sqlite3.connect(self.database) as conn:
 
             cursor = conn.cursor()
 
-            response = cursor.execute(
+            cursor.execute(
                 "SELECT NoteId, NoteTitle, NoteDate FROM Notes ORDER BY NoteId DESC;"
             )
 
-            notes = response.fetchall()
+            notes = cursor.fetchall()
 
         notes_list = []
 
         for note in notes:
             note_id = note[0]
-            title = self.mediator.call_event("decode", note[1])
-            date = note[2]
+            note_title = self.mediator.call_event("decode", note[1])
+            note_date = note[2]
 
-            notes_list.append((note_id, title, date))
+            notes_list.append(NoteData(id=note_id, title=note_title, date=note_date))
 
         return notes_list
 
@@ -56,7 +61,7 @@ class DatabaseManager:
 
             return decoded_content
 
-    def add_note(self, data: tuple[str]):
+    def add_note(self, data: tuple[str, str, str]) -> None:
 
         title = self.mediator.call_event("encode", data[0])
         date = data[1]
@@ -71,7 +76,7 @@ class DatabaseManager:
                 (title, date, content),
             )
 
-    def modify_note(self, data: tuple[int | str]):
+    def modify_note(self, data: tuple[int, str, str, str]) -> None:
 
         note_id = data[0]
         title = self.mediator.call_event("encode", data[1])
@@ -92,7 +97,7 @@ class DatabaseManager:
                 ),
             )
 
-    def delete_note(self, note_id: int):
+    def delete_note(self, note_id: int) -> None:
 
         with sqlite3.connect(self.database) as conn:
 
