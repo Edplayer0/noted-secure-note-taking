@@ -69,7 +69,7 @@ NotEd/
 ### Running the Application
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/NotEd.git
+   git clone https://github.com/Edplayer0/noted-secure-note-taking.git
    cd NotEd
    ```
 2. Run the application:
