@@ -1,13 +1,9 @@
 """Main module of the NotEd application."""
 
-import importlib
-import pkgutil
-from os.path import dirname
 from ui.app import App
 from ui.login import Login
 from ui.dashboard.dashboard import Dashboard
 from ui.menu.menu import Menu
-from ui.menu import functions
 from functions.files import app_files
 from managers.database.database_manager import DatabaseManager
 from managers.password.password_manager import PasswordManager
@@ -17,14 +13,11 @@ from mediator.app_mediator import AppMediator
 def load_menu_functions(menu: Menu):
     """Dynamically load and register menu functions."""
 
-    # Get the path of the `functions` package
-    functions_path = dirname(functions.__file__)
+    from ui.menu.functions import backup #pylint: disable=import-outside-toplevel
 
-    # Discover all modules in the `functions` package
-    for _, module_name, _ in pkgutil.iter_modules([functions_path]):
-        module = importlib.import_module(f"ui.menu.functions.{module_name}")
+    modules = [backup]  # Lista de módulos
 
-        # Check for a `REGISTRY` dictionary in the module
+    for module in modules:
         if hasattr(module, "REGISTRY"):
             for _, (label, func) in module.REGISTRY.items():
                 menu.registry_function(label, func)
