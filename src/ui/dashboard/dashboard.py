@@ -1,3 +1,5 @@
+"""Dashboard module for NotEd application."""
+
 from tkinter import Frame
 
 from ui.editor import Editor
@@ -7,8 +9,8 @@ from ui.dashboard.notes.frame_manager import FrameManager
 
 from mediator.mediator import Mediator
 
-
 class Dashboard:
+    """Dashboard class managing the main dashboard UI components."""
 
     def __init__(self, app, app_mediator: Mediator):
 
@@ -29,6 +31,7 @@ class Dashboard:
         self.mediator.add_handler("exit_menu", self.show)
 
     def show(self):
+        """Show the dashboard frame and load frames."""
 
         self.frames_manager.load_frames()
         self.frames_manager.show_frames()
@@ -36,5 +39,6 @@ class Dashboard:
         self.dashboard_frame.pack(fill="both", expand=True)
 
     def exit(self):
+        """Hide the dashboard frame."""
 
         self.dashboard_frame.pack_forget()

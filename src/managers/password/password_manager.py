@@ -1,3 +1,5 @@
+"""Password Manager Module."""
+
 import gc
 import base64
 import secrets
@@ -17,6 +19,19 @@ from mediator.mediator import Mediator
 
 
 class PasswordManager:
+    """Manages the creation and verification of user passwords.
+    It uses PBKDF2HMAC for key derivation and Fernet for encryption/decryption.
+
+    Attributes:
+        mediator (Mediator): The application mediator for event handling.
+        password_file (str): Path to the password file.
+        key_manager (KeyManager): Manages key storage and retrieval.
+        password_data (tuple): Loaded password data (truepass, salt1, salt2).
+    Methods:
+        verify(user_pass): Verifies the provided password.
+        new_password(): Initiates the process to create a new password.
+        generate(password): Generates and saves a new password.
+    """
 
     def __init__(self, app_mediator: Mediator):
 
@@ -42,6 +57,7 @@ class PasswordManager:
         self.mediator.add_handler("generate", self.generate)
 
     def verify(self, user_pass):
+        """Verifies the provided password against the stored password."""
 
         derivacion1 = PBKDF2HMAC(
             algorithm=SHA256(), length=32, salt=self.salt1, iterations=200000
@@ -77,10 +93,12 @@ class PasswordManager:
             messagebox.showerror("Error", "Contraseña incorrecta")
 
     def new_password(self):
+        """Initiates the process to create a new password."""
 
         NewPassword(self.mediator)
 
     def generate(self, password):
+        """Generates and saves a new password."""
 
         salt1 = secrets.token_bytes(16)
         salt2 = secrets.token_bytes(16)

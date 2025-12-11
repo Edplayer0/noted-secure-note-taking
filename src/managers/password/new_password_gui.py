@@ -1,3 +1,5 @@
+"""GUI for creating a new password."""
+
 from tkinter import messagebox
 import customtkinter as ctk
 
@@ -5,6 +7,7 @@ from mediator.mediator import Mediator
 
 
 class NewPassword(ctk.CTkToplevel):
+    """GUI for creating a new password."""
 
     def __init__(self, app_mediator: Mediator):
         super().__init__()
@@ -49,6 +52,7 @@ class NewPassword(ctk.CTkToplevel):
         self.button.pack(pady=10)
 
     def generate(self):
+        """Generate the new password."""
 
         if self.entry1.get().strip() != self.entry2.get().strip():
 

@@ -1,3 +1,5 @@
+"""Editor module for the NotEd application."""
+
 import re
 import tkinter as tk
 from datetime import datetime
@@ -8,7 +10,7 @@ from mediator.mediator import Mediator
 
 
 class Editor(tk.Frame):
-    """Editor de las notas"""
+    """Note editor interface"""
 
     def __init__(self, master, app_mediator: Mediator):
         super().__init__(master)
@@ -46,7 +48,7 @@ class Editor(tk.Frame):
         self.mediator.add_handler("current_note", lambda: self.current_note)
 
     def enter(self, data: tuple[int, str, str] | bool = None) -> None:
-        """Mostrar el editor y preparar para edición"""
+        """Open the editor with a new note or an existing one"""
 
         def on_entry_focus_in(event):
 
@@ -80,7 +82,8 @@ class Editor(tk.Frame):
         self.editor_text.focus_set()
 
     def save(self) -> None:
-        """Guardar cambios"""
+        """Save the current note being edited"""
+
         try:
             # El titulo actual
             current_title: str = self.editor_entry.get().strip()
@@ -132,7 +135,7 @@ class Editor(tk.Frame):
             print(f"Error en guardado final: {e}")
 
     def exit(self, no_save=False) -> None:
-        """Salir del editor y guardar cambios finales"""
+        """Exit the editor, optionally saving the note"""
 
         if not no_save:
             self.save()
