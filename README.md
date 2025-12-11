@@ -80,7 +80,7 @@ NotEd/
 ### Packaging as an Executable
 To create a standalone executable:
 ```bash
-pyinstaller --onefile --collect-all ui src/main.py
+pyinstaller --onedir --noconsole -i assets/icon.ico --add-data=.venv/Lib/site-packages/customtkinter;customtkinter/ --add-data=assets/bitmap.ico;. src/main.py
 ```
 
 ---
