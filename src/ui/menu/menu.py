@@ -5,11 +5,13 @@ from tkinter import Frame
 
 import customtkinter as ctk
 
+from src.mediator.mediator import Mediator
+
 
 class Menu:
     """Menu class to manage the application menu."""
 
-    def __init__(self, master, app_mediator):
+    def __init__(self, master, app_mediator: Mediator):
         self.mediator = app_mediator
 
         self.menu_frame = Frame(master)

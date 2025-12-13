@@ -1,19 +1,20 @@
 """Main module of the NotEd application."""
 
-from ui.app import App
-from ui.login import Login
-from ui.dashboard.dashboard import Dashboard
-from ui.menu.menu import Menu
-from functions.files import app_files
-from managers.database.database_manager import DatabaseManager
-from managers.password.password_manager import PasswordManager
-from managers.encryption.cipher import Cipher
-from mediator.app_mediator import AppMediator
+from src.ui.app import App
+from src.ui.login import Login
+from src.ui.dashboard.dashboard import Dashboard
+from src.ui.menu.menu import Menu
+from src.functions.files import app_files
+from src.managers.database.database_manager import DatabaseManager
+from src.managers.password.password_manager import PasswordManager
+from src.managers.encryption.cipher import Cipher
+from src.mediator.app_mediator import AppMediator
+
 
 def load_menu_functions(menu: Menu):
     """Dynamically load and register menu functions."""
 
-    from ui.menu.functions import backup #pylint: disable=import-outside-toplevel
+    from src.ui.menu.functions import backup  # pylint: disable=import-outside-toplevel
 
     modules = [backup]  # Lista de módulos
 
@@ -21,6 +22,7 @@ def load_menu_functions(menu: Menu):
         if hasattr(module, "REGISTRY"):
             for _, (label, func) in module.REGISTRY.items():
                 menu.registry_function(label, func)
+
 
 def main() -> None:
     """Main function of the application."""

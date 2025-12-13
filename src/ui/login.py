@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
 
 
 class Login(tk.Frame):

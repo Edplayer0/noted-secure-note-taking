@@ -2,12 +2,13 @@
 
 from tkinter import Frame
 
-from ui.editor import Editor
-from ui.dashboard.header import Header
-from ui.dashboard.footer.footer import Footer
-from ui.dashboard.notes.frame_manager import FrameManager
+from src.ui.editor import Editor
+from src.ui.dashboard.header import Header
+from src.ui.dashboard.footer.footer import Footer
+from src.ui.dashboard.notes.frame_manager import FrameManager
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
+
 
 class Dashboard:
     """Dashboard class managing the main dashboard UI components."""

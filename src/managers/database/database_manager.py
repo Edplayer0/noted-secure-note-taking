@@ -4,18 +4,18 @@ import sqlite3
 
 from collections import namedtuple
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
 
 
 NoteData = namedtuple("NoteData", ("id", "title", "date"))
 
 
 class DatabaseManager:
-    """Manages the database operations related to notes. 
-    
+    """Manages the database operations related to notes.
+
     Args:
         app_mediator (Mediator): The application mediator for event handling.
-        
+
     Methods:
         load_notes() -> list[NoteData]: Load the list of notes from the database.
         load_note_content(note_id: int) -> str: Load the content of a note from the database.

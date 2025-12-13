@@ -11,11 +11,11 @@ from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives import constant_time
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from managers.password.new_password_gui import NewPassword
-from managers.password.key_manager import KeyManager
+from src.managers.password.new_password_gui import NewPassword
+from src.managers.password.key_manager import KeyManager
 
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
 
 
 class PasswordManager:
