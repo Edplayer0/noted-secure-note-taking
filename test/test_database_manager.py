@@ -65,7 +65,9 @@ def test_database_manager(mocker, temp_db):
     with sqlite3.connect(temp_db) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "CREATE TABLE Notes (NoteId INTEGER PRIMARY KEY, NoteTitle TEXT, NoteDate TEXT, NoteContent TEXT);"
+            """CREATE TABLE Notes
+            (NoteId INTEGER PRIMARY KEY, NoteTitle TEXT,
+            NoteDate TEXT, NoteContent TEXT);"""
         )
         cursor.execute(
             "INSERT INTO Notes (NoteTitle, NoteDate, NoteContent) VALUES (?, ?, ?);",
