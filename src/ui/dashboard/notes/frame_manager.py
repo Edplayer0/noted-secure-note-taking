@@ -1,12 +1,17 @@
+"""Manages the note frames in the dashboard."""
+
 from math import ceil
 from tkinter import Frame
 
-from ui.dashboard.notes.notes_frame import NotesFrame
+from src.ui.dashboard.notes.notes_frame import NotesFrame
 
-from mediator.mediator import Mediator
+from src.models.note_models import NoteData
+
+from src.mediator.mediator import Mediator
 
 
 class FrameManager:
+    """Manages the note frames in the dashboard."""
 
     def __init__(self, dashboard_frame, app_mediator: Mediator):
 
@@ -29,9 +34,9 @@ class FrameManager:
 
         self.notes_frames.clear()
 
-        notes = self.mediator.call_event("load_notes")
+        notes: list[NoteData] = self.mediator.call_event("load_notes")
 
-        notes_count = 0
+        notes_count: int = 0
 
         for _ in range(ceil(len(notes) / 4)):
 

@@ -14,6 +14,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from src.managers.password.new_password_gui import NewPassword
 from src.managers.password.key_manager import KeyManager
 
+from src.managers.encryption.cipher import Cipher
 
 from src.mediator.mediator import Mediator
 
@@ -79,9 +80,9 @@ class PasswordManager:
         if constant_time.bytes_eq(posible_pass, self.truepass):
             del posible_pass
 
-            cipher = Fernet(base64.urlsafe_b64encode(notas_pass))
+            fernet_cipher = Fernet(base64.urlsafe_b64encode(notas_pass))
 
-            self.mediator.call_event("configure_cipher", cipher)
+            Cipher().configure_cipher(fernet_cipher)
 
             del notas_pass
 

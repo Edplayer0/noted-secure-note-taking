@@ -6,7 +6,9 @@ from datetime import datetime
 from typing import Optional
 from customtkinter import CTkTextbox, CTkFont
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
+
+from src.models.note_models import NoteData, NewNoteData, ModifyNoteData
 
 
 class Editor(tk.Frame):
@@ -39,7 +41,7 @@ class Editor(tk.Frame):
             padx=15,
             font=CTkFont(family="Arial", size=20),
             wrap="word",
-            fg_color="white"
+            fg_color="white",
         )
         self.editor_text.pack(fill="both", expand=True)
 
@@ -47,7 +49,7 @@ class Editor(tk.Frame):
         self.mediator.add_handler("open_editor", self.enter)
         self.mediator.add_handler("current_note", lambda: self.current_note)
 
-    def enter(self, data: tuple[int, str, str] | bool = None) -> None:
+    def enter(self, data: Optional[NoteData] = None) -> None:
         """Open the editor with a new note or an existing one"""
 
         def on_entry_focus_in(event):
@@ -67,9 +69,9 @@ class Editor(tk.Frame):
             return
 
         # Editar nota existente
-        self.current_note = data[0]
-        title: str = data[1]
-        date: str = data[2]
+        self.current_note = data.id
+        title: str = data.title
+        date: str = data.date
 
         content = self.mediator.call_event("load_note_content", self.current_note)
 
@@ -91,7 +93,11 @@ class Editor(tk.Frame):
             # El contenido de todo el campo de texto
             text_content: str = self.editor_text.get("1.0", "end-1c").strip()
 
-            if not text_content or not current_title:
+            if (
+                not text_content
+                or not current_title
+                or current_title == "Título de la nota..."
+            ):
                 return
 
             current_date: str
@@ -108,29 +114,32 @@ class Editor(tk.Frame):
                 # Si la fecha no cumple el patron se genera una
                 if not re.fullmatch(r"^\d\d/\d\d/\d\d\d\d$", file_date):
                     current_date = datetime.now().strftime("%d/%m/%Y")
-                    current_content = (
-                        self.editor_text.get("1.0", "end-1c")
-                    )
+                    current_content = self.editor_text.get("1.0", "end-1c")
                 else:
                     current_date = file_date
                     current_content = self.editor_text.get(
-                        "1.0", "end-1c").removeprefix(current_date + "\n")
+                        "1.0", "end-1c"
+                    ).removeprefix(current_date + "\n")
 
-            if current_title and current_title != "Título de la nota...":
-
-                if self.current_note is None:
-                    data = (current_title, current_date, current_content)
-                    self.mediator.call_event("add_note", data)
-                    return
-
-                data: tuple = (
-                    self.current_note,
-                    current_title,
-                    current_date,
-                    current_content,
+            if self.current_note is None:
+                data = NewNoteData(
+                    title=current_title,
+                    content=current_content,
+                    date=current_date,
                 )
 
-                self.mediator.call_event("modify_note", data)
+                self.mediator.call_event("add_note", data)
+                return
+
+            data = ModifyNoteData(
+                id=self.current_note,
+                title=current_title,
+                date=current_date,
+                content=current_content,
+            )
+
+            self.mediator.call_event("modify_note", data)
+
         except Exception as e:
             print(f"Error en guardado final: {e}")
 

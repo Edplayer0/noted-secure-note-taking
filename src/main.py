@@ -7,7 +7,6 @@ from src.ui.menu.menu import Menu
 from src.functions.files import app_files
 from src.managers.database.database_manager import DatabaseManager
 from src.managers.password.password_manager import PasswordManager
-from src.managers.encryption.cipher import Cipher
 from src.mediator.app_mediator import AppMediator
 
 
@@ -49,9 +48,6 @@ def main() -> None:
 
     # Manage the creation and verification of passwords
     PasswordManager(app_mediator)
-
-    # Manage the encryption/decryption of notes
-    Cipher(app_mediator)
 
     # Start the application showing the login
     app_mediator.call_event("show_login")

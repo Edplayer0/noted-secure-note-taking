@@ -1,6 +1,6 @@
 from customtkinter import CTkFrame, set_appearance_mode
-from ui.dashboard.notes.notes import Note
-from mediator.mediator import Mediator
+from src.ui.dashboard.notes.notes import Note
+from src.mediator.mediator import Mediator
 
 set_appearance_mode("light")
 

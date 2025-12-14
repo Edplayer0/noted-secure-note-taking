@@ -2,12 +2,14 @@
 
 import sqlite3
 
-from collections import namedtuple
-
 from src.mediator.mediator import Mediator
 
-
-NoteData = namedtuple("NoteData", ("id", "title", "date"))
+from src.models.note_models import (
+    NoteData,
+    NewNoteData,
+    ModifyNoteData,
+    NoteContentData,
+)
 
 
 class DatabaseManager:
@@ -53,7 +55,7 @@ class DatabaseManager:
 
         for note in notes:
             note_id = note[0]
-            note_title = self.mediator.call_event("decode", note[1])
+            note_title = note[1]
             note_date = note[2]
 
             notes_list.append(NoteData(id=note_id, title=note_title, date=note_date))
@@ -70,17 +72,16 @@ class DatabaseManager:
                 "SELECT NoteContent from Notes WHERE NoteID = ?;", (note_id,)
             )
 
-            encoded_content = cursor.fetchone()[0]
-            decoded_content = self.mediator.call_event("decode", encoded_content)
+            note_content = NoteContentData(content=cursor.fetchone()[0])
 
-            return decoded_content
+        return note_content.content
 
-    def add_note(self, data: tuple[str, str, str]) -> None:
+    def add_note(self, data: NewNoteData) -> None:
         """Add a new note to the database"""
 
-        title = self.mediator.call_event("encode", data[0])
-        date = data[1]
-        content = self.mediator.call_event("encode", data[2])
+        title = data.title
+        date = data.date
+        content = data.content
 
         with sqlite3.connect(self.database) as conn:
 
@@ -91,12 +92,14 @@ class DatabaseManager:
                 (title, date, content),
             )
 
-    def modify_note(self, data: tuple[int, str, str, str]) -> None:
+            conn.commit()
+
+    def modify_note(self, data: ModifyNoteData) -> None:
         """Modify an existing note in the database"""
-        note_id = data[0]
-        title = self.mediator.call_event("encode", data[1])
-        date = data[2]
-        content = self.mediator.call_event("encode", data[3])
+        note_id = data.id
+        title = data.title
+        date = data.date
+        content = data.content
 
         with sqlite3.connect(self.database) as conn:
 
@@ -112,6 +115,8 @@ class DatabaseManager:
                 ),
             )
 
+            conn.commit()
+
     def delete_note(self, note_id: int) -> None:
         """Delete a note from the database"""
 
@@ -120,3 +125,5 @@ class DatabaseManager:
             cursor = conn.cursor()
 
             cursor.execute("DELETE FROM Notes WHERE NoteId = ?;", (note_id,))
+
+            conn.commit()
