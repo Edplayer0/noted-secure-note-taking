@@ -3,7 +3,7 @@
 from tkinter import messagebox
 import customtkinter as ctk
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
 
 
 class NewPassword(ctk.CTkToplevel):

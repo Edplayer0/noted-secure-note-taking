@@ -57,7 +57,7 @@ class PasswordManager:
         self.mediator.add_handler("verify_password", self.verify)
         self.mediator.add_handler("generate", self.generate)
 
-    def verify(self, user_pass):
+    def verify(self, user_pass: bytearray):
         """Verifies the provided password against the stored password."""
 
         derivacion1 = PBKDF2HMAC(
@@ -90,8 +90,12 @@ class PasswordManager:
 
             self.mediator.call_event("start")
 
+            return True
+
         else:
             messagebox.showerror("Error", "Contraseña incorrecta")
+
+            return False
 
     def new_password(self):
         """Initiates the process to create a new password."""
