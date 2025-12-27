@@ -60,11 +60,7 @@ NotEd/
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Python 3.10 or higher
-- Install dependencies:
-  ```bash
-  pip install -r requirements.txt
-  ```
+- Python 3.14 or higher
 
 ### Running the Application
 1. Clone the repository:
@@ -72,6 +68,13 @@ NotEd/
    git clone https://github.com/Edplayer0/noted-secure-note-taking.git
    cd NotEd
    ```
+
+3. Install the dependencies
+   ```bash
+   pip install poetry
+   poetry install
+   ```
+
 2. Run the application:
    ```bash
    python src/main.py
