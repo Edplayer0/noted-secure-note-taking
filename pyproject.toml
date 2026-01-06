@@ -3,7 +3,7 @@ name = "noted"
 version = "0.1.0"
 description = "A modern, user-friendly, and secure note-taking application designed to protect your privacy."
 authors = [
-    {name = "Edplayer0",email = "ayusomartinezedgar@gmail.com"}
+    {name = "Edplayer0",email = "edgarayusodev@proton.me"}
 ]
 license = "MIT"
 license-files = ["LICENSE"]

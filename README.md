@@ -49,7 +49,8 @@ NotEd/
 │   ├── functions/            # Utility functions (backup, restore, etc.)
 │   └── assets/               # Static files (icons, images, etc.)
 │
-├── requirements.txt          # Python dependencies
+├── pyproject.toml            # Project details and dependencies
+├── poetry.lock               # Poetry dependencies lock file
 ├── README.md                 # Project documentation
 ├── LICENCE                   # MIT Licence
 └── .gitignore                # Git ignore file
@@ -109,7 +110,7 @@ We welcome contributions! If you'd like to improve NotEd, please fork the reposi
 
 For inquiries, feedback, or support, please contact:  
 **Edgar Ayuso Martínez**  
-📧 [ayusomartinezedgar@gmail.com](mailto:ayusomartinezedgar@gamil.com)
+📧 [edgarayusodev@proton.me](mailto:edgarayusodev@proton.me)
 
 ---
 
