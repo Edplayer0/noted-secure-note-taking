@@ -1,7 +1,8 @@
 """App communications mediator"""
 
 from typing import List, Dict, Callable, TypeVar
-from mediator.mediator import Mediator
+from pprint import pprint
+from src.mediator.mediator import Mediator
 
 T = TypeVar("T")
 
@@ -13,12 +14,14 @@ class AppMediator(Mediator):
 
         self.handlers: Dict[str, List[Callable]] = {}
 
-    def add_handler(self, event: str, handler: Callable) -> None:
+    def add_handler(self, event: str, handler: Callable, priority: int = 3) -> None:
         if not event in self.handlers:
             self.handlers[event] = []
-        self.handlers[event].append(handler)
+        self.handlers[event].insert(priority - 1, handler)
 
     def call_event(self, event: str, data: T | None = None) -> List[T] | T:
+
+        pprint(self.handlers)
 
         response = []
 

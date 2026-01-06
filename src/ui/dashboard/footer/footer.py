@@ -44,7 +44,7 @@ class Footer(Frame):
 
         self.mediator.add_handler("show_menu", self.hide)
         self.mediator.add_handler("exit_menu", self.show)
-        self.mediator.add_handler("open_editor", self.hide)
+        self.mediator.add_handler("open_editor", self.hide, priority=1)
         self.mediator.add_handler("close_editor", self.show)
         self.mediator.add_handler("start", self.show)
 

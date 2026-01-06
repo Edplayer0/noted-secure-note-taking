@@ -8,7 +8,7 @@ class Mediator(ABC):
     """Mediator abstaction"""
 
     @abstractmethod
-    def add_handler(self, event: str, handler: Callable) -> None:
+    def add_handler(self, event: str, handler: Callable, priority: int) -> None:
         """Appends a event"""
 
     @abstractmethod
