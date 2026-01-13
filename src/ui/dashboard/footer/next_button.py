@@ -1,6 +1,6 @@
 from customtkinter import CTkButton, CTkFont
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
 
 
 class NextButton(CTkButton):

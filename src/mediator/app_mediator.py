@@ -1,7 +1,7 @@
 """App communications mediator"""
 
 from typing import List, Dict, Callable, TypeVar
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
 
 T = TypeVar("T")
 

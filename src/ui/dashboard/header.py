@@ -2,8 +2,8 @@ import tkinter as tk
 
 from typing import Literal
 
-from functions.delete_note import delete_note
-from mediator.mediator import Mediator
+from src.functions.delete_note import delete_note
+from src.mediator.mediator import Mediator
 
 
 class Header(tk.Frame):
@@ -83,10 +83,8 @@ class Header(tk.Frame):
             self.menu_button_funct = "close"
 
             return None
-        
-        self.menu_button.config(
-            command=lambda: self.mediator.call_event("show_menu")
-        )
+
+        self.menu_button.config(command=lambda: self.mediator.call_event("show_menu"))
 
         self.menu_button_funct = "open"
 

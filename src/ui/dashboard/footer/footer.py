@@ -2,11 +2,11 @@ from tkinter import Frame
 
 from customtkinter import CTkFrame
 
-from ui.dashboard.footer.new_button import NewButton
-from ui.dashboard.footer.prev_button import PrevButton
-from ui.dashboard.footer.next_button import NextButton
+from src.ui.dashboard.footer.new_button import NewButton
+from src.ui.dashboard.footer.prev_button import PrevButton
+from src.ui.dashboard.footer.next_button import NextButton
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
 
 
 class Footer(Frame):
