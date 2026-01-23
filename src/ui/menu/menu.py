@@ -6,6 +6,7 @@ from tkinter import Frame
 import customtkinter as ctk
 
 from src.mediator.mediator import Mediator
+from src.ui.menu.register import Register
 
 
 class Menu:
@@ -16,14 +17,11 @@ class Menu:
 
         self.menu_frame = Frame(master)
 
-        self.funcions: dict[str, Callable] = {}
+        Register.config_menu(self)
+        Register.load_functions()
 
         self.mediator.add_handler("show_menu", self.show)
         self.mediator.add_handler("exit_menu", self.exit)
-
-    def registry_function(self, name: str, func: Callable) -> None:
-        """Register a new function in the menu."""
-        self.funcions[name] = func
 
     def exit(self):
         """Hide the menu."""
@@ -33,17 +31,16 @@ class Menu:
         """Display the menu with registered functions."""
         self.menu_frame.pack(fill="both", expand=True)
 
-        for widget in self.menu_frame.winfo_children():
-            widget.destroy()
+    def add_button(self, label: str, function: Callable):
+        """Add a button to the menu"""
 
-        for name, func in self.funcions.items():
-            button = ctk.CTkButton(
-                self.menu_frame,
-                text=name,
-                command=lambda func=func: func(self.mediator),
-                fg_color="#FFEE8C",
-                hover_color="gray",
-                font=ctk.CTkFont(family="Segoe UI Symbol", size=22, weight="bold"),
-                text_color="white",
-            )
-            button.pack(pady=(10, 0), padx=10, fill="x", ipady=10, ipadx=10)
+        button = ctk.CTkButton(
+            self.menu_frame,
+            text=label,
+            command=lambda: function(self.mediator),
+            fg_color="#FFEE8C",
+            hover_color="gray",
+            font=ctk.CTkFont(family="Segoe UI Symbol", size=22, weight="bold"),
+            text_color="white",
+        )
+        button.pack(pady=(10, 0), padx=10, fill="x", ipady=10, ipadx=10)

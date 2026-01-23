@@ -2,7 +2,7 @@ import sys
 from os.path import dirname, abspath
 from tkinter import messagebox
 
-from mediator.mediator import Mediator
+from src.mediator.mediator import Mediator
 
 
 def app_files(app_mediator: Mediator) -> None:
