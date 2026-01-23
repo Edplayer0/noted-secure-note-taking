@@ -66,9 +66,9 @@ class Header(tk.Frame):
             command=lambda: delete_note(master, app_mediator),
         )
 
-        self.mediator.add_handler("close_editor", self.alter_mode)
-        self.mediator.add_handler("open_editor", self.alter_mode)
-        self.mediator.add_handler("start", self.show)
+        self.mediator.add_handler("close_editor", self.alter_mode, 2)
+        self.mediator.add_handler("open_editor", self.alter_mode, 3)
+        self.mediator.add_handler("start", self.show, 2)
         self.mediator.add_handler("show_menu", self.alter_menu_button_function)
         self.mediator.add_handler("exit_menu", self.alter_menu_button_function)
 
