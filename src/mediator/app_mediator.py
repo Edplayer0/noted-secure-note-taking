@@ -1,7 +1,6 @@
 """App communications mediator"""
 
 from typing import List, Dict, Callable, TypeVar
-from pprint import pprint
 from src.mediator.mediator import Mediator
 
 T = TypeVar("T")
@@ -17,30 +16,19 @@ class AppMediator(Mediator):
     def add_handler(self, event: str, handler: Callable, priority: int = 3) -> None:
         if not event in self.handlers:
             self.handlers[event] = []
-        self.handlers[event].insert(priority - 1, handler)
+        self.handlers[event].append(
+            (
+                priority,
+                handler,
+            )
+        )
 
     def call_event(self, event: str, data: T | None = None) -> List[T] | T:
-
-        pprint(self.handlers)
 
         response = []
 
         if event in self.handlers:
-            for handler in self.handlers[event]:
-
-                # sig = signature(handler)
-                # num_args = len(sig.parameters)
-
-                # try:
-                #     if num_args == 0:  # No toma args
-                #         result = handler()
-                #     elif data is not None:  # Toma args y hay data
-                #         result = handler(data)
-                #     else:  # Toma args pero no hay data
-                #         result = handler()
-                # except TypeError:
-                #     # Fallback: intenta sin args si falla con data
-                #     result = handler()
+            for _, handler in sorted(self.handlers[event], key=lambda i: i[0]):
 
                 if data is None:
                     result = handler()

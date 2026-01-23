@@ -25,9 +25,9 @@ class Dashboard:
 
         self.footer = Footer(app, app_mediator)
 
-        self.mediator.add_handler("start", self.show)
-        self.mediator.add_handler("open_editor", self.exit, priority=1)
-        self.mediator.add_handler("close_editor", self.show)
+        self.mediator.add_handler("start", self.show, 3)
+        self.mediator.add_handler("open_editor", self.exit, 1)
+        self.mediator.add_handler("close_editor", self.show, 3)
         self.mediator.add_handler("show_menu", self.exit)
         self.mediator.add_handler("exit_menu", self.show)
 
@@ -41,5 +41,4 @@ class Dashboard:
 
     def exit(self):
         """Hide the dashboard frame."""
-
         self.dashboard_frame.pack_forget()
