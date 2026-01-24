@@ -33,10 +33,6 @@ class Dashboard:
 
     def show(self):
         """Show the dashboard frame and load frames."""
-
-        self.frames_manager.load_frames()
-        self.frames_manager.show_frames()
-
         self.dashboard_frame.pack(fill="both", expand=True)
 
     def exit(self):

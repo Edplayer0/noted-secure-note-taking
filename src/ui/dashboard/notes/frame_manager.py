@@ -25,6 +25,10 @@ class FrameManager:
 
         self.mediator.add_handler("prev_frame", self.prev_frame)
         self.mediator.add_handler("next_frame", self.next_frame)
+        self.mediator.add_handler("start", self.load_frames)
+        self.mediator.add_handler("start", self.show_frames)
+        self.mediator.add_handler("load_frames", self.load_frames)
+        self.mediator.add_handler("load_frames", self.show_frames)
 
     def load_frames(self) -> None:
         """Dinamically creates the frames"""
@@ -59,7 +63,15 @@ class FrameManager:
 
                 self.current_frame = 0
 
-            self.notes_frames[self.current_frame].show()
+            try:
+                self.notes_frames[self.current_frame].show()
+            except IndexError:
+                try:
+                    self.notes_frames[self.current_frame - 1].show()
+                except IndexError:
+                    pass
+                else:
+                    self.current_frame -= 1
 
     def next_frame(self) -> None:
         """Show the next frame if exists"""

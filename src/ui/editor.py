@@ -156,3 +156,5 @@ class Editor(tk.Frame):
         self.editor_text.yview_moveto(0)
         self.editor_text.delete("1.0", tk.END)
         self.pack_forget()
+
+        self.mediator.call_event("load_frames")

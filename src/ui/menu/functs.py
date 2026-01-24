@@ -32,3 +32,5 @@ This will overwrite your current notes.",
     backup_path = app_mediator.call_event("files")["BACKUP_DATABASE"]
 
     shutil.copy(backup_path, database)
+
+    app_mediator.call_event("load_frames")
