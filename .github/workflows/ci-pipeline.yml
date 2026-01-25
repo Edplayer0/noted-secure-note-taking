@@ -32,4 +32,6 @@ jobs:
           poetry install --no-root
 
       - name: Run tests
-        run: python -m pytest
+        run: |
+         eval "$(poetry env activate)"
+         python -m pytest
