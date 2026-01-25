@@ -73,7 +73,7 @@ NotEd/
 3. Install the dependencies
    ```bash
    pip install poetry
-   poetry install
+   poetry install --no-root
    ```
 
 2. Run the application:
