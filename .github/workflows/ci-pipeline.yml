@@ -29,7 +29,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install poetry
           eval "$(poetry env activate)"
-          python -m poetry install --no-root
+          poetry install --no-root
           python -m pytest
 
       - name: Run tests
