@@ -21,7 +21,7 @@ def app_files(app_mediator: Mediator) -> None:
         files_folder.mkdir()
 
         # create the database with sqlite3
-        with sqlite3.connect(files_folder / "notas.db") as conn:
+        with sqlite3.connect(files_folder / "notes.db") as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """CREATE TABLE Notes
@@ -38,8 +38,8 @@ def app_files(app_mediator: Mediator) -> None:
 
     # add the paths to the dictionary
     files["PASSWORD_FILE"] = files_folder / "password.json"
-    files["DATABASE"] = files_folder / "notas.db"
-    files["BACKUP_DATABASE"] = files_folder / "notas-backup.db"
+    files["DATABASE"] = files_folder / "notes.db"
+    files["BACKUP_DATABASE"] = files_folder / "notes-backup.db"
 
     # if it's an executable, use the bitmap
     # added on pyinstaller installation
