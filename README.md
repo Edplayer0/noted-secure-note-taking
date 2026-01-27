@@ -28,7 +28,7 @@
 
 ## 🛠️ Technologies Used
 
-- **Programming Language:** Python 3.10+
+- **Programming Language:** Python 3.14+
 - **Libraries:**
   - `tkinter` and `customtkinter` for the graphical user interface.
   - `cryptography` for secure encryption and decryption.
