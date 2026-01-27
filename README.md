@@ -42,18 +42,21 @@
 ```plaintext
 NotEd/
 │
+├── assets/               # Static files (icons, images, etc.)
+│
 ├── src/
 │   ├── main.py               # Entry point of the application
 │   ├── ui/                   # User interface components
 │   ├── managers/             # Backend logic (database, encryption, password management)
-│   ├── functions/            # Utility functions (backup, restore, etc.)
-│   └── assets/               # Static files (icons, images, etc.)
+│   ├── functions/            # Utility functions (file-managment, notes deletion)
 │
 ├── pyproject.toml            # Project details and dependencies
 ├── poetry.lock               # Poetry dependencies lock file
 ├── README.md                 # Project documentation
 ├── LICENCE                   # MIT Licence
+├── .env                      # Python path configuration
 └── .gitignore                # Git ignore file
+
 ```
 
 ---
@@ -114,4 +117,4 @@ For inquiries, feedback, or support, please contact:
 
 ---
 
-**NotEd** - Your privacy, your notes, your ideas.
+**NotEd** - Your ideas, your privacy, your notes.
