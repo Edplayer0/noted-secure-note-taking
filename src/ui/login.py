@@ -24,7 +24,7 @@ class Login(tk.Frame):
 
         self.saludo = ctk.CTkLabel(
             self.login_box,
-            text="\nBienvenido",
+            text="\nWelcome",
             font=ctk.CTkFont(family="Monotype Corsiva", size=33),
             padx=2,
             pady=2,
@@ -33,7 +33,7 @@ class Login(tk.Frame):
 
         self.instruccion = ctk.CTkLabel(
             self.login_box,
-            text="\n\nIntroduce su contraseña:\n\n",
+            text="\n\nIntroduce the password:\n\n",
             font=ctk.CTkFont(family="Helvetica", size=20),
         )
         self.instruccion.pack()

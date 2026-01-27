@@ -14,7 +14,7 @@ class NewPassword(ctk.CTkToplevel):
 
         self.mediator = app_mediator
 
-        self.title("Crear contraseña")
+        self.title("Creating a password")
 
         self.geometry("300x200")
 
@@ -24,7 +24,7 @@ class NewPassword(ctk.CTkToplevel):
 
         self.instruct = ctk.CTkLabel(
             self,
-            text="Introduce la nueva contraseña",
+            text="Introduce the new password",
             font=ctk.CTkFont(family="Arial", size=17, weight="bold"),
         )
         self.instruct.pack(pady=10)
@@ -56,7 +56,7 @@ class NewPassword(ctk.CTkToplevel):
 
         if self.entry1.get().strip() != self.entry2.get().strip():
 
-            messagebox.showerror("Error", "Las contraseñas no coinciden")
+            messagebox.showerror("Error", "The passwords aren't equal")
 
             return
 

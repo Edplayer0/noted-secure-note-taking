@@ -1,10 +1,10 @@
 from tkinter import messagebox
 
 
-def delete_note(app, app_mediator):
+def delete_note(app_mediator):
 
     confirmacion = messagebox.askyesno(
-        "Confirmacion", "¿Realmente deseas eliminar esta nota?"
+        "Confirm", "Do you really want to delete this note?"
     )
 
     if confirmacion:

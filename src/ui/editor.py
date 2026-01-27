@@ -54,7 +54,7 @@ class Editor(tk.Frame):
 
         def on_entry_focus_in(event):
 
-            if self.editor_entry.get() == "Título de la nota...":
+            if self.editor_entry.get() == "Title...":
                 self.editor_entry.delete(0, tk.END)
                 self.editor_entry.config(fg="black")
 
@@ -63,7 +63,7 @@ class Editor(tk.Frame):
         if data is None:
             # Nueva nota
             self.editor_entry.config(fg="grey")
-            self.editor_entry.insert(0, "Título de la nota...")
+            self.editor_entry.insert(0, "Title...")
             self.editor_entry.bind("<FocusIn>", on_entry_focus_in)
             self.editor_text.focus_set()
             return
@@ -93,11 +93,7 @@ class Editor(tk.Frame):
             # El contenido de todo el campo de texto
             text_content: str = self.editor_text.get("1.0", "end-1c").strip()
 
-            if (
-                not text_content
-                or not current_title
-                or current_title == "Título de la nota..."
-            ):
+            if not text_content or not current_title or current_title == "Title...":
                 return
 
             current_date: str

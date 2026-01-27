@@ -92,10 +92,9 @@ class PasswordManager:
 
             return True
 
-        else:
-            messagebox.showerror("Error", "Contraseña incorrecta")
+        messagebox.showerror("Error", "Incorrect password")
 
-            return False
+        return False
 
     def new_password(self):
         """Initiates the process to create a new password."""

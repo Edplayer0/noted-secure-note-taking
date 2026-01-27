@@ -63,7 +63,7 @@ class Header(tk.Frame):
             padx=10,
             font=("Segoe UI Symbol", 23),
             cursor="hand2",
-            command=lambda: delete_note(master, app_mediator),
+            command=lambda: delete_note(app_mediator),
         )
 
         self.mediator.add_handler("close_editor", self.alter_mode, 2)
