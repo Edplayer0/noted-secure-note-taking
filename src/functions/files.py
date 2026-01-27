@@ -1,6 +1,7 @@
 import sys
-from os.path import dirname, abspath
-from tkinter import messagebox
+import sqlite3
+
+from pathlib import Path
 
 from src.mediator.mediator import Mediator
 
@@ -10,31 +11,32 @@ def app_files(app_mediator: Mediator) -> None:
     which returns a dict with the paths"""
 
     # ARCHIVOS DE LA APLICACION
-    file_path = f"{dirname(abspath(__file__))}\\.."
+    files_folder = Path.cwd() / "files"
+
+    if not files_folder.exists():
+        files_folder.mkdir()
+
+        with sqlite3.connect(files_folder / "notas.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """CREATE TABLE Notes
+            (NoteId INTEGER PRIMARY KEY, NoteTitle TEXT,
+            NoteDate TEXT, NoteContent TEXT);"""
+            )
+        conn.commit()
+
+        with open(files_folder / "password.json", "w", encoding="utf-8") as password:
+            password.write("[]")
 
     files = {}
 
-    # Identificar el estado de la ejecucion
+    files["PASSWORD_FILE"] = files_folder / "password.json"
+    files["DATABASE"] = files_folder / "notas.db"
+    files["BACKUP_DATABASE"] = files_folder / "notas-backup.db"
+
     if hasattr(sys, "frozen"):
-        # Si esta en uso
-        file_path = dirname(sys.executable)
-        try:
-            files["PASSWORD_FILE"] = f"{file_path}\\password.json"
-            files["DATABASE"] = f"{file_path}\\notas.db"
-            files["BACKUP_DATABASE"] = f"{file_path}\\notas-backup.db"
-            files["LOG_FILE"] = f"{file_path}\\log.txt"
-            files["ICON"] = f"{sys._MEIPASS}\\bitmap.ico"
-        except Exception as e:
-            messagebox.showerror("Error", e)
+        files["ICON"] = Path(sys._MEIPASS) / "bitmap.ico"
     else:
-        # Si esta en desarrollo
-        try:
-            files["PASSWORD_FILE"] = f"{file_path}\\..\\files\\password.json"
-            files["DATABASE"] = f"{file_path}\\..\\files\\notas.db"
-            files["BACKUP_DATABASE"] = f"{file_path}\\..\\files\\notas-backup.db"
-            files["LOG_FILE"] = f"{file_path}\\..\\files\\log.txt"
-            files["ICON"] = f"{file_path}\\..\\assets\\bitmap.ico"
-        except Exception as e:
-            messagebox.showerror("Error", e)
+        files["ICON"] = Path.cwd() / "assets" / "bitmap.ico"
 
     app_mediator.add_handler("files", lambda: files)
