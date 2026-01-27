@@ -45,8 +45,8 @@ class Editor(tk.Frame):
         )
         self.editor_text.pack(fill="both", expand=True)
 
-        self.mediator.add_handler("close_editor", self.exit)
-        self.mediator.add_handler("open_editor", self.enter)
+        self.mediator.add_handler("close_editor", self.exit, priority=1)
+        self.mediator.add_handler("open_editor", self.enter, priority=5)
         self.mediator.add_handler("current_note", lambda: self.current_note)
 
     def enter(self, data: Optional[NoteData] = None) -> None:
@@ -79,7 +79,7 @@ class Editor(tk.Frame):
         self.editor_entry.insert(0, title)
         self.editor_text.insert("1.0", f"{date}\n{content}")
 
-        self.editor_text.update()
+        self.update_idletasks()
 
         self.editor_text.focus_set()
 
@@ -156,3 +156,5 @@ class Editor(tk.Frame):
         self.editor_text.yview_moveto(0)
         self.editor_text.delete("1.0", tk.END)
         self.pack_forget()
+
+        self.mediator.call_event("load_frames")

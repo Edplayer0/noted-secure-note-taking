@@ -2,8 +2,8 @@ import tkinter as tk
 
 from typing import Literal
 
-from functions.delete_note import delete_note
-from mediator.mediator import Mediator
+from src.functions.delete_note import delete_note
+from src.mediator.mediator import Mediator
 
 
 class Header(tk.Frame):
@@ -66,9 +66,9 @@ class Header(tk.Frame):
             command=lambda: delete_note(master, app_mediator),
         )
 
-        self.mediator.add_handler("close_editor", self.alter_mode)
-        self.mediator.add_handler("open_editor", self.alter_mode)
-        self.mediator.add_handler("start", self.show)
+        self.mediator.add_handler("close_editor", self.alter_mode, 2)
+        self.mediator.add_handler("open_editor", self.alter_mode, 3)
+        self.mediator.add_handler("start", self.show, 2)
         self.mediator.add_handler("show_menu", self.alter_menu_button_function)
         self.mediator.add_handler("exit_menu", self.alter_menu_button_function)
 
@@ -83,10 +83,8 @@ class Header(tk.Frame):
             self.menu_button_funct = "close"
 
             return None
-        
-        self.menu_button.config(
-            command=lambda: self.mediator.call_event("show_menu")
-        )
+
+        self.menu_button.config(command=lambda: self.mediator.call_event("show_menu"))
 
         self.menu_button_funct = "open"
 

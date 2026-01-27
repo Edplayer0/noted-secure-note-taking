@@ -1,12 +1,13 @@
 """Module defining the main application window for NotEd."""
 
 from tkinter import Tk
+from src.mediator.mediator import Mediator
 
 
 class App(Tk):
     """Main application window."""
 
-    def __init__(self, app_mediator):
+    def __init__(self, app_mediator: Mediator):
         super().__init__()
 
         self.mediator = app_mediator

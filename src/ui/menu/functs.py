@@ -1,9 +1,12 @@
-"""Functions to backup and restore notes database."""
+"""Menu functions module"""
 
 import shutil
 from tkinter import messagebox
 
+from src.ui.menu.register import Register
 
+
+@Register.registry(" MAKE BACKUP")
 def backup_notes(app_mediator):
     """Create a backup of the notes database."""
     database = app_mediator.call_event("files")["DATABASE"]
@@ -12,12 +15,14 @@ def backup_notes(app_mediator):
     shutil.copy(database, backup_path)
 
 
+@Register.registry(" RESTORE BACKUP")
 def restore_notes(app_mediator):
     """Restore the notes database from a backup."""
 
     confirm = messagebox.askyesno(
         title="Restore Backup",
-        message="Are you sure you want to restore the backup? This will overwrite your current notes.",
+        message="Are you sure you want to restore the backup? \
+This will overwrite your current notes.",
     )
 
     if not confirm:
@@ -28,8 +33,4 @@ def restore_notes(app_mediator):
 
     shutil.copy(backup_path, database)
 
-
-REGISTRY = {
-    "backup_notes": (" COPIA DE SEGURIDAD", backup_notes),
-    "restore_notes": (" RESTAURAR COPIA", restore_notes),
-}
+    app_mediator.call_event("load_frames")

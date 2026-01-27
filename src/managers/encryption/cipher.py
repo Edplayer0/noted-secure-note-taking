@@ -9,24 +9,17 @@ class Cipher:
     """Cipher manager class.
     Manage the encryption and decryption of data.
 
-    Args:
-        app_mediator (Mediator): Application mediator.
     Methods:
         configure_cipher: Configure the cipher to use.
         encode: Encode data.
         decode: Decode data."""
 
-    _initialized = False
-
     def __new__(cls) -> "Cipher":
         if not hasattr(cls, "_instance"):
-            cls._instance = super(Cipher, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self):
-
-        if self._initialized:
-            return
 
         self._cipher: Fernet | None = None
 

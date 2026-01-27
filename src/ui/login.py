@@ -64,7 +64,7 @@ class Login(tk.Frame):
         )
         self.copylabel.pack(side="bottom")
 
-        self.mediator.add_handler("start", self.exit)
+        self.mediator.add_handler("start", self.exit, 1)
         self.mediator.add_handler("show_login", self.enter)
         self.mediator.add_handler(
             "enable_login_button", lambda: self.boton_login.configure(state="normal")
