@@ -75,9 +75,12 @@ def export_to_txt(app_mediator: Mediator) -> None:
 
     file_path = Path("notes.txt")
 
+    quantity = len(notes)
+
     with open(file_path, "w", encoding="UTF-8") as file:
         file.write(file_content)
 
     messagebox.showinfo(
-        "Export", f"Notes successfully exported to: '{str(file_path.absolute())}'"
+        "Export",
+        f"{quantity} notes successfully exported to: '{str(file_path.absolute())}'",
     )
