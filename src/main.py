@@ -1,5 +1,14 @@
 """Main module of the NotEd application."""
 
+import os
+import sys
+from pathlib import Path
+
+path = Path(os.path.dirname(__file__)) / ".."
+
+sys.path.insert(0, str(path))
+
+# pylint: disable=wrong-import-position
 from src.ui.app import App
 from src.ui.login import Login
 from src.ui.dashboard.dashboard import Dashboard
